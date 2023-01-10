@@ -38,6 +38,13 @@ M.setup = function(user_opts)
 		return vim.tbl_extend("force", self.winopts, new_winopts)
 	end
 
+	M.load = function(selected)
+		local session = user_config.sessions.sessions_path .. selected[1]
+		vim.cmd.source(session)
+		vim.g[user_config.sessions.sessions_variable] = vim.fs.basename(session)
+	end
+	fzf.config.set_action_helpstr(M.load, "load-session")
+
 	M.list = function()
 		local iter = vim.loop.fs_scandir(user_config.sessions.sessions_path)
 		local next = vim.loop.fs_scandir_next(iter)
@@ -50,11 +57,14 @@ M.setup = function(user_opts)
 			prompt = "sessions:",
 			file_icons = false,
 			show_cwd_header = false,
-			previewer = session_previewer,
 			preview_opts = "nohidden",
 
+			previewer = session_previewer,
 			winopts = user_config.fzf_winopts,
-			cwd = user_config.sessions_path,
+			cwd = user_config.sessions.sessions_path,
+			actions = {
+				["default"] = M.load,
+			},
 		})
 	end
 end
