@@ -1,0 +1,5 @@
+cd ~/dotfiles
+badd +2 nvim/init.lua
+badd +9 ~/dotfiles/./nvim/plugin/mappings.vim
+argglobal
+%argdel

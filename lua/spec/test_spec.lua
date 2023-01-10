@@ -1,5 +1,0 @@
-describe("entry test", function()
-	it("first test", function()
-		assert.are.equal("a", "a")
-	end)
-end)
