@@ -1,13 +1,19 @@
-local config = require("nvim-possession.config")
-local utils = require("nvim-possession.utils")
-
 local ok, fzf = pcall(require, "fzf-lua")
 if not ok then
 	print("fzf-lua required as dependency")
 end
 
+local config = require("nvim-possession.config")
+local utils = require("nvim-possession.utils")
+
 local M = {}
 
+---expose the following interfaces:
+---require("nvim-possession").new()
+---require("nvim-possession").list()
+---require("nvim-possession").update()
+---require("nvim-possession").status()
+---@param user_opts table
 M.setup = function(user_opts)
 	local user_config = vim.tbl_deep_extend("force", config, user_opts or {})
 
@@ -61,6 +67,20 @@ M.setup = function(user_opts)
 			else
 				print("session already exists")
 			end
+		end
+	end
+
+	---update loaded session with current status
+	M.update = function()
+		local cur_session = vim.g[user_config.sessions.sessions_variable]
+		if cur_session ~= nil then
+			local confirm = vim.fn.confirm("overwrite session?", "&Yes\n&No", 2)
+			if confirm == 1 then
+				vim.cmd.mksession({ args = { user_config.sessions.sessions_path .. cur_session }, bang = true })
+				print("updated session: " .. cur_session)
+			end
+		else
+			print("no session loaded")
 		end
 	end
 
