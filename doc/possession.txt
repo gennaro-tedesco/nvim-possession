@@ -4,7 +4,7 @@
 Table of Contents                               *possession-table-of-contents*
 
   - 🔌 Installation and quickstart|possession-🔌-installation-and-quickstart|
-  - ⚙️ Usage and advanced configuration|possession-⚙️-usage-and-advanced-configuration|
+  - 🛠 Usage and advanced configuration|possession-🛠-usage-and-advanced-configuration|
   - Statusline                                         |possession-statusline|
 
 <h1 align="center">
@@ -86,7 +86,7 @@ Exposed interfaces
 │possession.update()│update current session (if new buffers are open)                           │do nothing if no session is loaded                                     │
 
 
-⚙️ USAGE AND ADVANCED CONFIGURATION*possession-⚙️-usage-and-advanced-configuration*
+🛠 USAGE AND ADVANCED CONFIGURATION*possession-🛠-usage-and-advanced-configuration*
 
 As shown above the main use of the plugin is to show all existing sessions (say
 via `<leader>sl`) and load the selected one upon `<CR>`. Once a session is
