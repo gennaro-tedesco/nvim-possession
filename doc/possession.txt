@@ -5,6 +5,7 @@ Table of Contents                               *possession-table-of-contents*
 
   - 🔌 Installation and quickstart|possession-🔌-installation-and-quickstart|
   - ⚙️ Usage and advanced configuration|possession-⚙️-usage-and-advanced-configuration|
+  - Statusline                                         |possession-statusline|
 
 <h1 align="center">
 
@@ -120,7 +121,7 @@ however if you really want to do so:
 <
 
 
-STATUSLINE ~
+STATUSLINE                                             *possession-statusline*
 
 You can call `require("nvim-possession").status()` as component in your
 statusline, for example with `lualine` you would have
