@@ -1,16 +1,13 @@
 name: panvimdoc
 
-on:
-  workflow_dispatch:
-  push:
-    paths:
-      - "README.md"
-      - "**.yml"
+on: [push]
 
 jobs:
   docs:
     runs-on: ubuntu-latest
     name: pandoc to vimdoc
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v2
       - name: panvimdoc
