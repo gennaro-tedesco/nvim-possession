@@ -55,7 +55,7 @@ Exposed interfaces
 | possession.new()    | prompt for name to create new session                                       | session folder must alredy exist, return a message error otherwise  |
 | possession.update() | update current session (if new buffers are open)                            | do nothing if no session is loaded                                  |
 
-## ⚙️ Usage and advanced configuration
+## 🛠 Usage and advanced configuration
 
 As shown above the main use of the plugin is to show all existing sessions (say via `<leader>sl`) and load the selected one upon `<CR>`. Once a session is loaded a global variable is defined containing the session name (to display in a statusline - see below - or to validate which session is currently active). New sessions can also be created and updated on the fly, and they will show when you next invoke the list.
 
