@@ -6,8 +6,9 @@ describe("test matching session files", function()
 		utils = require("nvim-possession.utils")
 		test_file = "spec/session_test_file"
 		session_files = {
-			"nvim/init.lua",
-			"nvim/plugin/mappings.vim",
+			"lua/nvim-possession/init.lua",
+			"lua/spec/session_files_spec.lua",
+			"lua/nvim-possession/utils.lua",
 		}
 	end)
 

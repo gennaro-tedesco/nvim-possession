@@ -1,5 +1,6 @@
-cd ~/dotfiles
-badd +2 nvim/init.lua
-badd +19 ~/dotfiles/./nvim/plugin/mappings.vim
+cd ~/nvim-possession
+badd +15 lua/nvim-possession/init.lua
+badd +9 ~/nvim-possession/./lua/spec/session_files_spec.lua
+badd +4 ~/nvim-possession/./lua/nvim-possession/utils.lua
 argglobal
 %argdel

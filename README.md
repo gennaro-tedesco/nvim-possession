@@ -79,7 +79,7 @@ require("nvim-possession").setup({
 })
 ```
 
-### Statusline
+## Statusline
 
 You can call `require("nvim-possession").status()` as component in your statusline, for example with `lualine` you would have
 
