@@ -1,6 +1,6 @@
 <h1 align="center">
   <br>
-  <img width="300" height="300" src="https://user-images.githubusercontent.com/15387611/211777630-b7e93115-7646-428a-9299-63ff0d842434.png">
+  <img width="250" height="250" src="https://user-images.githubusercontent.com/15387611/211777630-b7e93115-7646-428a-9299-63ff0d842434.png">
   <br>
   nvim-possession
   <br>

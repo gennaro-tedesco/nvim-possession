@@ -1,6 +1,11 @@
 name: panvimdoc
 
-on: [push]
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "README.md"
+      - "**.yml"
 
 jobs:
   docs:
