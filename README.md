@@ -7,9 +7,14 @@
 </h1>
 
 <h2 align="center">
-  <img alt="releases" src="https://img.shields.io/github/release/gennaro-tedesco/nvim-possession"/>
   <a href="#" onclick="return false;">
-      <img alt="Lua" src="https://img.shields.io/badge/lua-%232C2D72.svg?&style=flat&logo=lua&logoColor=white"/>
+    <img alt="PR" src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat"/>
+  </a>
+  <a href="#" onclick="return false;">
+    <img alt="lua" src="https://img.shields.io/badge/lua-%232C2D72.svg?&style=flat&logo=lua&logoColor=white"/>
+  </a>
+  <a href="https://github.com/gennaro-tedesco/nvim-possession/releases">
+    <img alt="releases" src="https://img.shields.io/github/release/gennaro-tedesco/nvim-possession"/>
   </a>
 </h2>
 
