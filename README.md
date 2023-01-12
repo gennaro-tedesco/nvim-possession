@@ -17,7 +17,7 @@ You are puzzled by neovim sessions and are not using them, are you? Fear no more
 
 This plugin is a no-nonsense session manager built on top of [fzf-lua](https://github.com/ibhagwan/fzf-lua) (required) that makes managing sessions quick and visually appealing: dynamically browse through your existing sessions, create new ones, update and delete with a statusline component to remind you of where you are. See for yourself:
 
-> demo here
+![demo](https://user-images.githubusercontent.com/15387611/211946693-7c0a8f00-4ed8-4142-a8aa-a4dc75f42841.gif)
 
 ## 🔌 Installation and quickstart
 
@@ -79,7 +79,7 @@ require("nvim-possession").setup({
 })
 ```
 
-## Statusline
+## 🚥 Statusline
 
 You can call `require("nvim-possession").status()` as component in your statusline, for example with `lualine` you would have
 

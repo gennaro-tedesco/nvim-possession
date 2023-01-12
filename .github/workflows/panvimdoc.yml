@@ -19,6 +19,9 @@ jobs:
         uses: kdheepak/panvimdoc@main
         with:
           vimdoc: possession
+          version: "Neovim >= 0.8.0"
+          demojify: true
+          treesitter: true
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: "Auto generate docs"
