@@ -1,19 +1,21 @@
 <h1 align="center">
   <br>
-  <img width="250" height="250" src="https://user-images.githubusercontent.com/15387611/211777630-b7e93115-7646-428a-9299-63ff0d842434.png">
+  <img width="150" height="150" src="https://user-images.githubusercontent.com/15387611/211777630-b7e93115-7646-428a-9299-63ff0d842434.png">
   <br>
   nvim-possession
   <br>
 </h1>
 
 <h2 align="center">
-  <img alt="PR" src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat"/>
-  <img alt="Lua" src="https://img.shields.io/badge/lua-%232C2D72.svg?&style=flat&logo=lua&logoColor=white"/>
+  <img alt="releases" src="https://img.shields.io/github/release/gennaro-tedesco/nvim-possession"/>
+  <a href="#" onclick="return false;">
+      <img alt="Lua" src="https://img.shields.io/badge/lua-%232C2D72.svg?&style=flat&logo=lua&logoColor=white"/>
+  </a>
 </h2>
 
 <h4 align="center">No-nonsense session manager</h4>
 
-You are puzzled by neovim sessions and are not using them, are you? Fear no more and start your pos-sessions journey.
+You are puzzled by neovim sessions and are not using them, are you? Start your pos-sessions journey, fear no more!
 
 This plugin is a no-nonsense session manager built on top of [fzf-lua](https://github.com/ibhagwan/fzf-lua) (required) that makes managing sessions quick and visually appealing: dynamically browse through your existing sessions, create new ones, update and delete with a statusline component to remind you of where you are. See for yourself:
 
@@ -100,3 +102,7 @@ to display
 </p>
 
 the component automatically disappears or changes if you delete the current session or switch to another one.
+
+## Feedback
+
+If you find this plugin useful consider awarding it a ⭐, it is a great way to give feedback! Otherwise, any additional suggestions or merge request is warmly welcome!
