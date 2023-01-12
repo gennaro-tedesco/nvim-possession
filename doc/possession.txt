@@ -1,10 +1,10 @@
-*possession.txt*          For NVIM v0.8.0         Last change: 2023 January 11
+*possession.txt*        For Neovim >= 0.8.0       Last change: 2023 January 12
 
 ==============================================================================
 Table of Contents                               *possession-table-of-contents*
 
-  - 🔌 Installation and quickstart|possession-🔌-installation-and-quickstart|
-  - 🛠 Usage and advanced configuration|possession-🛠-usage-and-advanced-configuration|
+  - Installation and quickstart       |possession-installation-and-quickstart|
+  - Usage and advanced configuration|possession-usage-and-advanced-configuration|
   - Statusline                                         |possession-statusline|
 
 <h1 align="center">
@@ -39,11 +39,12 @@ quick and visually appealing: dynamically browse through your existing
 sessions, create new ones, update and delete with a statusline component to
 remind you of where you are. See for yourself:
 
+<div class="figure">
+<img src="https://user-images.githubusercontent.com/15387611/211946693-7c0a8f00-4ed8-4142-a8aa-a4dc75f42841.gif" title="fig:"/>
+<p class="caption">demo</p>
+</div>
 
-  demo here
-
-
-🔌 INSTALLATION AND QUICKSTART *possession-🔌-installation-and-quickstart*
+INSTALLATION AND QUICKSTART           *possession-installation-and-quickstart*
 
 Install `nvim-possession` with your favourite plugin manager (`fzf-lua` is
 required) and invoke `require("nvim-possession").setup({})`; in order to avoid
@@ -55,7 +56,7 @@ quickstart configuration is, for instance
 - with lazy.nvim <https://github.com/folke/lazy.nvim>
 
 
->
+>lua
     {
         "gennaro-tedesco/nvim-possession",
         dependencies = {
@@ -86,7 +87,7 @@ Exposed interfaces
 │possession.update()│update current session (if new buffers are open)                           │do nothing if no session is loaded                                     │
 
 
-🛠 USAGE AND ADVANCED CONFIGURATION*possession-🛠-usage-and-advanced-configuration*
+USAGE AND ADVANCED CONFIGURATION *possession-usage-and-advanced-configuration*
 
 As shown above the main use of the plugin is to show all existing sessions (say
 via `<leader>sl`) and load the selected one upon `<CR>`. Once a session is
@@ -102,7 +103,7 @@ particular the default location folder for sessions is `vim.fn.stdpath("data")
 .. "/sessions/",`. You should not need to change any of the default settings,
 however if you really want to do so:
 
->
+>lua
     
     require("nvim-possession").setup({
         sessions = {
@@ -126,7 +127,7 @@ STATUSLINE                                             *possession-statusline*
 You can call `require("nvim-possession").status()` as component in your
 statusline, for example with `lualine` you would have
 
->
+>lua
     
     lualine.setup({
         sections = {
