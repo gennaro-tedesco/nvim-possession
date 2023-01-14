@@ -144,7 +144,7 @@ M.setup = function(user_opts)
 		end
 	end
 
-	if user_config.autoload then
+	if user_config.autoload and vim.fn.argc() == 0 then
 		M.autoload()
 	end
 end
