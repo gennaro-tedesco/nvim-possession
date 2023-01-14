@@ -22,4 +22,22 @@ M.session_files = function(file)
 	return buffers
 end
 
+---return the first session whose dir corresponds to cwd
+---@param sessions_path string
+---@return string|nil
+M.session_in_cwd = function(sessions_path)
+	local session_dir, dir_pat = "", "^cd%s*"
+	for _, file in ipairs(vim.fn.readdir(sessions_path)) do
+		for line in io.lines(sessions_path .. file) do
+			if string.find(line, dir_pat) then
+				session_dir = vim.fs.normalize(line:gsub("cd%s*", ""))
+				if session_dir == vim.fn.getcwd() then
+					return file
+				end
+			end
+		end
+	end
+	return nil
+end
+
 return M
