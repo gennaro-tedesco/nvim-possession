@@ -157,7 +157,6 @@ M.setup = function(user_opts)
 		M.autoload()
 	end
 
-	---create autosave command on VimLeave
 	if user_config.autosave then
 		local autosave_possession = vim.api.nvim_create_augroup("AutosavePossession", {})
 		vim.api.nvim_clear_autocmds({ group = autosave_possession })
