@@ -8,6 +8,10 @@ M.sessions = {
 
 M.autoload = false
 M.autosave = true
+M.autoswitch = {
+	enable = true,
+	exclude_ft = { "fugitive", "alpha", "NvimTree", "fzf", "qf" },
+}
 
 M.fzf_winopts = {
 	hl = { normal = "Normal" },

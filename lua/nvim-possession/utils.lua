@@ -40,4 +40,17 @@ M.session_in_cwd = function(sessions_path)
 	return nil
 end
 
+---check if an item is in a list
+---@param value string
+---@param list table
+---@return boolean
+M.is_in_list = function(value, list)
+	for _, v in pairs(list) do
+		if v == value then
+			return true
+		end
+	end
+	return false
+end
+
 return M
