@@ -37,6 +37,8 @@ Install `nvim-possession` with your favourite plugin manager (`fzf-lua` is requi
     "gennaro-tedesco/nvim-possession",
     dependencies = {
         "ibhagwan/fzf-lua",
+        -- OR
+        "nvim-telescope/telescope.nvim",
     },
     config = true,
     init = function()
@@ -56,11 +58,14 @@ Install `nvim-possession` with your favourite plugin manager (`fzf-lua` is requi
 
 Exposed interfaces
 
-| function            | description                                                                 | interaction                                                         |
-| :------------------ | :-------------------------------------------------------------------------- | :------------------------------------------------------------------ |
-| possession.list()   | list all the existing sessions with fzf-lua; preview shows files in session | `<CR>` load selected session<br>`<Ctrl-x>` delete selection session |
-| possession.new()    | prompt for name to create new session                                       | session folder must alredy exist, return a message error otherwise  |
-| possession.update() | update current session (if new buffers are open)                            | do nothing if no session is loaded                                  |
+| function                             | description                                                     | interaction                                                         |
+| :----------------------------------- | :-------------------------------------------------------------- | :------------------------------------------------------------------ |
+| `possession.list()`                  | list all the existing sessions. see below for more information  | `<CR>` load selected session<br>`<Ctrl-x>` delete selection session |
+| `possession.new()`                   | prompt for name to create new session                           | session folder must alredy exist, return a message error otherwise  |
+| `possession.update()`                | update current session (if new buffers are open)                | do nothing if no session is loaded                                  |
+| `possession.status()`                | print the current session you're in                             | do nothing if no session is loaded                                  |
+
+The `possession.list()` function lists the session via `fzf` or `telescope.nvim`. See below on how to set that up.
 
 ## 🛠 Usage and advanced configuration
 
@@ -69,20 +74,28 @@ As shown above the main use of the plugin is to show all existing sessions (say 
 Default configurations can be found in the [config](https://github.com/gennaro-tedesco/nvim-possession/blob/main/lua/nvim-possession/config.lua) and can be overriden at will by passing them to the `setup({})` function: in particular the default location folder for sessions is `vim.fn.stdpath("data") .. "/sessions/",`. You should not need to change any of the default settings, however if you really want to do so:
 
 ```lua
-
 require("nvim-possession").setup({
-    sessions = {
-        sessions_path = ... -- folder to look for sessions, must be a valid existing path
-        sessions_variable = .. -- defines vim.g[sessions_variable] when a session is loaded
-        sessions_icon = ...
+  sessions = {
+    sessions_path = "...", -- folder to look for sessions, must be a valid existing path
+    sessions_variable = "...", -- defines vim.g[sessions_variable] when a session is loaded
+    sessions_icon = "...",
+  },
+
+  viewer = "fzf|telescope", -- which plugin you want to use to display the sessions
+  dressing = true, -- enable a ui when asking for a new session name
+  autoload = false, -- detect and autoload sessions in cwd
+
+  telescope = {
+    theme = "get_dropdown", -- the telescope theme you want to use
+  },
+
+  fzf_winopts = {
+    -- any valid fzf-lua winopts options, for instance
+    width = 0.25,
+    preview = {
+      horizontal = "down:40%",
     },
-    fzf_winopts = {
-        -- any valid fzf-lua winopts options, for instance
-        width = 0.5,
-        preview = {
-            vertical = "right:30%"
-        }
-    }
+  },
 })
 ```
 
@@ -91,12 +104,12 @@ require("nvim-possession").setup({
 You can call `require("nvim-possession").status()` as component in your statusline, for example with `lualine` you would have
 
 ```lua
-
 lualine.setup({
-	sections = {
-		lualine_a = ...
-		lualine_b = ...
-		lualine_c = { { "filename", path = 1 }, { "require'nvim-possession'.status()" } },
+  sections = {
+    lualine_a = "...",
+    lualine_b = "...",
+    lualine_c = { { "filename", path = 1 }, { "require'nvim-possession'.status()" } },
+  },
 })
 ```
 
@@ -110,4 +123,4 @@ the component automatically disappears or changes if you delete the current sess
 
 ## Feedback
 
-If you find this plugin useful consider awarding it a ⭐, it is a great way to give feedback! Otherwise, any additional suggestions or merge request is warmly welcome!
+If you find this plugin useful consider awarding it a ⭐, it's a great way to give feedback! Otherwise, any additional suggestions or merge request is warmly welcome!
