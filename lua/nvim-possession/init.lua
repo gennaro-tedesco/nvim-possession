@@ -87,6 +87,9 @@ M.setup = function(user_opts)
 	---load selected session
 	---@param selected string
 	M.load = function(selected)
+		if user_config.autoswitch.enable and vim.g[user_config.sessions.sessions_variable] ~= nil then
+			M.autoswitch()
+		end
 		local session = user_config.sessions.sessions_path .. selected[1]
 		vim.cmd.source(session)
 		vim.g[user_config.sessions.sessions_variable] = vim.fs.basename(session)
