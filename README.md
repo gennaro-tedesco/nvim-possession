@@ -76,6 +76,9 @@ require("nvim-possession").setup({
         sessions_variable = .. -- defines vim.g[sessions_variable] when a session is loaded
         sessions_icon = ...
     },
+
+    autoload = false, -- whether to autoload sessions in the cwd at startup
+
     fzf_winopts = {
         -- any valid fzf-lua winopts options, for instance
         width = 0.5,
@@ -85,6 +88,18 @@ require("nvim-possession").setup({
     }
 })
 ```
+
+### Autoload in cwd
+
+If you want to automagically load sessions defined for the current working directory at startup, specify
+
+```lua
+require("nvim-possession").setup({
+    autoload = true
+})
+```
+
+This autoloads sessions when starting neovim without file arguments (i. e. `$ nvim `) and in case such sessions explicitly contain a reference to the current working directory (you must have `vim.go.ssop+=curdir`); this is by design as this plugin intends to be as less invasive as possible.
 
 ## 🚥 Statusline
 
