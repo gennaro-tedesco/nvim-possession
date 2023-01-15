@@ -16,6 +16,7 @@ M.telescope = {
 }
 
 M.autoload = false
+M.autosave = true
 
 M.fzf_winopts = {
 	hl = { normal = "Normal" },
