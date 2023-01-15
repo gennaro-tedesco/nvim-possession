@@ -144,8 +144,29 @@ M.setup = function(user_opts)
 		end
 	end
 
+	---check if a session is loaded and save it automatically
+	---without asking for prompt
+	M.autosave = function()
+		local cur_session = vim.g[user_config.sessions.sessions_variable]
+		if cur_session ~= nil then
+			vim.cmd.mksession({ args = { user_config.sessions.sessions_path .. cur_session }, bang = true })
+		end
+	end
+
 	if user_config.autoload and vim.fn.argc() == 0 then
 		M.autoload()
+	end
+
+	if user_config.autosave then
+		local autosave_possession = vim.api.nvim_create_augroup("AutosavePossession", {})
+		vim.api.nvim_clear_autocmds({ group = autosave_possession })
+		vim.api.nvim_create_autocmd("VimLeave", {
+			group = autosave_possession,
+			desc = "📌 save session on VimLeave",
+			callback = function()
+				M.autosave()
+			end,
+		})
 	end
 end
 
