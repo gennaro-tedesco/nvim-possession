@@ -6,6 +6,8 @@ M.sessions = {
 	sessions_icon = "📌",
 }
 
+M.autoload = false
+
 M.fzf_winopts = {
 	hl = { normal = "Normal" },
 	border = "rounded",

@@ -133,6 +133,20 @@ M.setup = function(user_opts)
 			},
 		})
 	end
+
+	---if any of the existing sessions contains the cwd
+	---then load it on startup directly
+	M.autoload = function()
+		local session = utils.session_in_cwd(user_config.sessions.sessions_path)
+		if session ~= nil then
+			vim.cmd.source(user_config.sessions.sessions_path .. session)
+			vim.g[user_config.sessions.sessions_variable] = vim.fs.basename(session)
+		end
+	end
+
+	if user_config.autoload and vim.fn.argc() == 0 then
+		M.autoload()
+	end
 end
 
 return M
