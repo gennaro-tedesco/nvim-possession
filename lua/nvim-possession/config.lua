@@ -1,8 +1,7 @@
 local M = {}
 
 M.sessions = {
-	-- sessions_path = vim.fn.stdpath("data") .. "/sessions/",
-	sessions_path = "/home/singularis/.config/nvim/misc/sessions/",
+	sessions_path = vim.fn.stdpath("data") .. "/sessions/",
 	sessions_variable = "session",
 	sessions_icon = "📌",
 }
