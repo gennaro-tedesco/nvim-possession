@@ -36,9 +36,9 @@ Install `nvim-possession` with your favourite plugin manager (`fzf-lua` is requi
 {
     "gennaro-tedesco/nvim-possession",
     dependencies = {
-        "ibhagwan/fzf-lua",
-        -- OR
-        "nvim-telescope/telescope.nvim",
+        "ibhagwan/fzf-lua", -- if you want to use fzf
+        "nvim-telescope/telescope.nvim", -- if you want to use telescope
+        "stevearc/dressing.nvim", -- if you want to have a nice ui input box when prompted for a session name
     },
     config = true,
     init = function()
