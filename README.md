@@ -99,6 +99,16 @@ require("nvim-possession").setup({
 })
 ```
 
+### Autoload in cwd
+
+If you want to automagically load sessions defined for the current working directory at startup, specify
+
+```lua
+require("nvim-possession").setup({
+  autoload = true
+})
+```
+
 ## 🚥 Statusline
 
 You can call `require("nvim-possession").status()` as component in your statusline, for example with `lualine` you would have
