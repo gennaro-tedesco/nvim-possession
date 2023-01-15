@@ -15,6 +15,8 @@ M.telescope = {
   theme = "get_dropdown",
 }
 
+M.autoload = false
+
 M.fzf_winopts = {
   hl = { normal = "Normal" },
   border = "rounded",
