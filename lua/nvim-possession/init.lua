@@ -153,6 +153,25 @@ M.setup = function(user_opts)
 		end
 	end
 
+	---before switching session perform the following:
+	---1) autosave current session
+	---2) save and close all modifiable buffers
+	M.autoswitch = function()
+		vim.cmd.write()
+		M.autosave()
+		vim.cmd.bufdo("e")
+		local buf_list = vim.tbl_filter(function(buf)
+			return vim.api.nvim_buf_is_valid(buf)
+				and vim.api.nvim_buf_get_option(buf, "buflisted")
+				and vim.api.nvim_buf_get_option(buf, "modifiable")
+				and not utils.is_in_list(vim.api.nvim_buf_get_option(buf, "filetype"), config.autoswitch.exclude_ft)
+		end, vim.api.nvim_list_bufs())
+		for _, buf in pairs(buf_list) do
+			vim.cmd(buf .. "bufdo :w")
+			vim.cmd("bd " .. buf)
+		end
+	end
+
 	if user_config.autoload and vim.fn.argc() == 0 then
 		M.autoload()
 	end
