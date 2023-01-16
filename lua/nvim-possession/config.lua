@@ -9,7 +9,7 @@ M.sessions = {
 M.autoload = false
 M.autosave = true
 M.autoswitch = {
-	enable = true,
+	enable = false,
 	exclude_ft = { "fugitive", "alpha", "NvimTree", "fzf", "qf" },
 }
 

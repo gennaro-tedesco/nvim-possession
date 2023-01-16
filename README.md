@@ -110,6 +110,24 @@ require("nvim-possession").setup({
 })
 ```
 
+When switching between sessions it is often desirable to remove pending buffers belonging to the previous one, so that only buffers with the new session files are loaded. In order to achieve this behaviour specify
+
+```lua
+
+M.autoswitch = {
+	enable = true, -- default false
+}
+```
+
+this option autosaves the previous session and deletes all its buffers before switching to a new one. If there are some filetypes you want to always keep, you may indicate them in
+
+```language
+
+M.autoswitch = {
+    exclude_ft = {"...", "..."}, -- list of filetypes to exclude from deletion
+}
+```
+
 ## 🚥 Statusline
 
 You can call `require("nvim-possession").status()` as component in your statusline, for example with `lualine` you would have

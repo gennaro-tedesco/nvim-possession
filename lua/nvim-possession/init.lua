@@ -160,6 +160,7 @@ M.setup = function(user_opts)
 	---1) autosave current session
 	---2) save and close all modifiable buffers
 	M.autoswitch = function()
+		vim.cmd.write()
 		M.autosave()
 		vim.cmd.bufdo("e")
 		local buf_list = vim.tbl_filter(function(buf)
