@@ -1,4 +1,4 @@
-*possession.txt*        For Neovim >= 0.8.0       Last change: 2023 January 15
+*possession.txt*        For Neovim >= 0.8.0       Last change: 2023 January 16
 
 ==============================================================================
 Table of Contents                               *possession-table-of-contents*
@@ -159,6 +159,30 @@ behaviour), if you want to opt-out specify
     require("nvim-possession").setup({
         autosave = false -- default true
     })
+<
+
+
+When switching between sessions it is often desirable to remove pending buffers
+belonging to the previous one, so that only buffers with the new session files
+are loaded. In order to achieve this behaviour specify
+
+>lua
+    
+    M.autoswitch = {
+        enable = true, -- default false
+    }
+<
+
+
+this option autosaves the previous session and deletes all its buffers before
+switching to a new one. If there are some filetypes you want to always keep,
+you may indicate them in
+
+>language
+    
+    M.autoswitch = {
+        exclude_ft = {"...", "..."}, -- list of filetypes to exclude from deletion
+    }
 <
 
 
