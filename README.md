@@ -80,6 +80,13 @@ require("nvim-possession").setup({
     autoload = false, -- whether to autoload sessions in the cwd at startup
     autosave = true, -- whether to autosave loaded sessions before quitting
 
+    post_hook = nil -- callback, function to execute after loading a session
+                    -- useful to restore file trees, file managers or terminals
+                    -- function()
+                    --     require('FTerm').open()
+                    --     require('nvim-tree').toggle(false, true)
+                    -- end
+
     fzf_winopts = {
         -- any valid fzf-lua winopts options, for instance
         width = 0.5,
@@ -107,6 +114,21 @@ Sessions are automatically saved before quitting, should buffers be added or rem
 ```lua
 require("nvim-possession").setup({
     autosave = false -- default true
+})
+```
+
+### Post-hooks
+
+After loading a session you may want to specify additional actions to run that may not be have been saved in the session content: this is often the case for restoring file tree or file managers, or open up terminal windows or fuzzy finders or set specific options. To do so you can use
+
+```lua
+
+require("nvim-possession").setup({
+    post_hook = function()
+        require("FTerm").open()
+        require('nvim-tree').toggle(false, true)
+        vim.lsp.buf.format()
+    end
 })
 ```
 
