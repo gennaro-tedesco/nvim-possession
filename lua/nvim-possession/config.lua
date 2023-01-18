@@ -9,6 +9,8 @@ M.sessions = {
 M.autoload = false
 M.autosave = true
 
+M.post_hook = nil
+
 M.fzf_winopts = {
 	hl = { normal = "Normal" },
 	border = "rounded",

@@ -90,6 +90,9 @@ M.setup = function(user_opts)
 		local session = user_config.sessions.sessions_path .. selected[1]
 		vim.cmd.source(session)
 		vim.g[user_config.sessions.sessions_variable] = vim.fs.basename(session)
+		if type(user_config.post_hook) == "function" then
+			user_config.post_hook()
+		end
 	end
 	fzf.config.set_action_helpstr(M.load, "load-session")
 
@@ -141,6 +144,9 @@ M.setup = function(user_opts)
 		if session ~= nil then
 			vim.cmd.source(user_config.sessions.sessions_path .. session)
 			vim.g[user_config.sessions.sessions_variable] = vim.fs.basename(session)
+		end
+		if type(user_config.post_hook) == "function" then
+			user_config.post_hook()
 		end
 	end
 
