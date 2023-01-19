@@ -13,6 +13,8 @@ M.autoswitch = {
 	exclude_ft = { "fugitive", "alpha", "NvimTree", "fzf", "qf" },
 }
 
+M.post_hook = nil
+
 M.fzf_winopts = {
 	hl = { normal = "Normal" },
 	border = "rounded",
