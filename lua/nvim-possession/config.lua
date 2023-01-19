@@ -8,6 +8,10 @@ M.sessions = {
 
 M.autoload = false
 M.autosave = true
+M.autoswitch = {
+	enable = false,
+	exclude_ft = { "fugitive", "alpha", "NvimTree", "fzf", "qf" },
+}
 
 M.post_hook = nil
 

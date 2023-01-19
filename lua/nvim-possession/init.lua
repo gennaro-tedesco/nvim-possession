@@ -88,6 +88,9 @@ M.setup = function(user_opts)
 	---@param selected string
 	M.load = function(selected)
 		local session = user_config.sessions.sessions_path .. selected[1]
+		if user_config.autoswitch.enable and vim.g[user_config.sessions.sessions_variable] ~= nil then
+			M.autoswitch()
+		end
 		vim.cmd.source(session)
 		vim.g[user_config.sessions.sessions_variable] = vim.fs.basename(session)
 		if type(user_config.post_hook) == "function" then
@@ -156,6 +159,24 @@ M.setup = function(user_opts)
 		local cur_session = vim.g[user_config.sessions.sessions_variable]
 		if cur_session ~= nil then
 			vim.cmd.mksession({ args = { user_config.sessions.sessions_path .. cur_session }, bang = true })
+		end
+	end
+
+	---before switching session perform the following:
+	---1) autosave current session
+	---2) save and close all modifiable buffers
+	M.autoswitch = function()
+		vim.cmd.write()
+		M.autosave()
+		vim.cmd.bufdo("e")
+		local buf_list = vim.tbl_filter(function(buf)
+			return vim.api.nvim_buf_is_valid(buf)
+				and vim.api.nvim_buf_get_option(buf, "buflisted")
+				and vim.api.nvim_buf_get_option(buf, "modifiable")
+				and not utils.is_in_list(vim.api.nvim_buf_get_option(buf, "filetype"), config.autoswitch.exclude_ft)
+		end, vim.api.nvim_list_bufs())
+		for _, buf in pairs(buf_list) do
+			vim.cmd("bd " .. buf)
 		end
 	end
 
