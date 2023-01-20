@@ -79,6 +79,10 @@ require("nvim-possession").setup({
 
     autoload = false, -- whether to autoload sessions in the cwd at startup
     autosave = true, -- whether to autosave loaded sessions before quitting
+    autoswitch = {
+        enable = false -- whether to enable autoswitch
+        exclude_ft = {}, -- list of filetypes to exclude from autoswitch
+    }
 
     post_hook = nil -- callback, function to execute after loading a session
                     -- useful to restore file trees, file managers or terminals
@@ -120,19 +124,22 @@ require("nvim-possession").setup({
 When switching between sessions it is often desirable to remove pending buffers belonging to the previous one, so that only buffers with the new session files are loaded. In order to achieve this behaviour specify
 
 ```lua
-
-M.autoswitch = {
-	enable = true, -- default false
-}
+require("nvim-possession").setup({
+    autoswitch = {
+        enable = true, -- default false
+    }
+})
 ```
 
 this option autosaves the previous session and deletes all its buffers before switching to a new one. If there are some filetypes you want to always keep, you may indicate them in
 
-```language
-
-M.autoswitch = {
-    exclude_ft = {"...", "..."}, -- list of filetypes to exclude from deletion
-}
+```lua
+require("nvim-possession").setup({
+    autoswitch = {
+        enable = true, -- default false
+        exclude_ft = {"...", "..."}, -- list of filetypes to exclude from deletion
+    }
+})
 ```
 
 ### Post-hooks
