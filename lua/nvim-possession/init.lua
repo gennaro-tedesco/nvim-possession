@@ -1,8 +1,3 @@
-local ok, fzf = pcall(require, "fzf-lua")
-if not ok then
-	print("fzf-lua required as dependency")
-end
-
 local config = require("nvim-possession.config")
 local utils = require("nvim-possession.utils")
 
@@ -15,10 +10,16 @@ local M = {}
 ---require("nvim-possession").status()
 ---@param user_opts table
 M.setup = function(user_opts)
+	local fzf_ok, fzf = pcall(require, "fzf-lua")
+	local builtin_ok, builtin = pcall(require, "fzf-lua.previewer.builtin")
+	if not fzf_ok or not builtin_ok then
+		print("fzf-lua required as dependency")
+		return
+	end
+
 	local user_config = vim.tbl_deep_extend("force", config, user_opts or {})
 
 	--- extend fzf builtin previewer
-	local builtin = require("fzf-lua.previewer.builtin")
 	local session_previewer = builtin.base:extend()
 	function session_previewer:new(o, opts, fzf_win)
 		session_previewer.super.new(self, o, opts, fzf_win)
