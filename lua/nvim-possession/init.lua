@@ -1,4 +1,5 @@
 local config = require("nvim-possession.config")
+local ui = require("nvim-possession.ui")
 local utils = require("nvim-possession.utils")
 
 local M = {}
@@ -10,39 +11,7 @@ local M = {}
 ---require("nvim-possession").status()
 ---@param user_opts table
 M.setup = function(user_opts)
-	local fzf_ok, fzf = pcall(require, "fzf-lua")
-	local builtin_ok, builtin = pcall(require, "fzf-lua.previewer.builtin")
-	if not fzf_ok or not builtin_ok then
-		print("fzf-lua required as dependency")
-		return
-	end
-
 	local user_config = vim.tbl_deep_extend("force", config, user_opts or {})
-
-	--- extend fzf builtin previewer
-	local session_previewer = builtin.base:extend()
-	function session_previewer:new(o, opts, fzf_win)
-		session_previewer.super.new(self, o, opts, fzf_win)
-		setmetatable(self, session_previewer)
-		return self
-	end
-
-	function session_previewer:populate_preview_buf(entry_str)
-		local tmpbuf = self:get_tmp_buffer()
-		local files = utils.session_files(user_config.sessions.sessions_path .. entry_str)
-
-		vim.api.nvim_buf_set_lines(tmpbuf, 0, -1, false, files)
-		self:set_preview_buf(tmpbuf)
-		self.win:update_scrollbar()
-	end
-
-	function session_previewer:gen_winopts()
-		local new_winopts = {
-			wrap = false,
-			number = false,
-		}
-		return vim.tbl_extend("force", self.winopts, new_winopts)
-	end
 
 	---get global variable with session name: useful for statusbar components
 	---@return string|nil
@@ -98,7 +67,7 @@ M.setup = function(user_opts)
 			user_config.post_hook()
 		end
 	end
-	fzf.config.set_action_helpstr(M.load, "load-session")
+	-- fzf.config.set_action_helpstr(M.load, "load-session")
 
 	---delete selected session
 	---@param selected string
@@ -113,11 +82,17 @@ M.setup = function(user_opts)
 			end
 		end
 	end
-	fzf.config.set_action_helpstr(M.delete, "delete-session")
+	-- fzf.config.set_action_helpstr(M.delete, "delete-session")
 
 	---list all existing sessions and their files
 	---return fzf picker
 	M.list = function()
+		local fzf_ok, fzf = pcall(require, "fzf-lua")
+		if not fzf_ok then
+			print("fzf-lua required as dependency")
+			return
+		end
+
 		local iter = vim.loop.fs_scandir(user_config.sessions.sessions_path)
 		local next = vim.loop.fs_scandir_next(iter)
 		if next == nil then
@@ -126,12 +101,13 @@ M.setup = function(user_opts)
 		end
 
 		return fzf.files({
+			user_config = user_config,
 			prompt = user_config.sessions.sessions_icon .. "sessions:",
 			file_icons = false,
 			show_cwd_header = false,
 			preview_opts = "nohidden",
 
-			previewer = session_previewer,
+			previewer = ui.session_previewer,
 			winopts = user_config.fzf_winopts,
 			cwd = user_config.sessions.sessions_path,
 			actions = {
