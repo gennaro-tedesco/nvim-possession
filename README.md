@@ -142,6 +142,8 @@ require("nvim-possession").setup({
 })
 ```
 
+A note on lazy loading: this plugin is extremely light weight and it generally loads in no time: practically speaking there should not be any need to lazy load it on events. If you are however opting in the `autoload` feature, notice that such a feature by definition loads the existing session buffers in memory at start-up, thereby also triggering all other buffer related events (especially treesitter); this may result in higher start-up times but is independent of the plugin (you would get the same load by manually sourcing the session files).
+
 ### Post-hooks
 
 After loading a session you may want to specify additional actions to run that may not be have been saved in the session content: this is often the case for restoring file tree or file managers, or open up terminal windows or fuzzy finders or set specific options. To do so you can use

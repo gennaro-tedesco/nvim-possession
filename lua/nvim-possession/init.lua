@@ -11,6 +11,12 @@ local M = {}
 ---require("nvim-possession").status()
 ---@param user_opts table
 M.setup = function(user_opts)
+	local fzf_ok, fzf = pcall(require, "fzf-lua")
+	if not fzf_ok then
+		print("fzf-lua required as dependency")
+		return
+	end
+
 	local user_config = vim.tbl_deep_extend("force", config, user_opts or {})
 
 	---get global variable with session name: useful for statusbar components
@@ -67,7 +73,7 @@ M.setup = function(user_opts)
 			user_config.post_hook()
 		end
 	end
-	-- fzf.config.set_action_helpstr(M.load, "load-session")
+	fzf.config.set_action_helpstr(M.load, "load-session")
 
 	---delete selected session
 	---@param selected string
@@ -82,17 +88,11 @@ M.setup = function(user_opts)
 			end
 		end
 	end
-	-- fzf.config.set_action_helpstr(M.delete, "delete-session")
+	fzf.config.set_action_helpstr(M.delete, "delete-session")
 
 	---list all existing sessions and their files
 	---return fzf picker
 	M.list = function()
-		local fzf_ok, fzf = pcall(require, "fzf-lua")
-		if not fzf_ok then
-			print("fzf-lua required as dependency")
-			return
-		end
-
 		local iter = vim.loop.fs_scandir(user_config.sessions.sessions_path)
 		local next = vim.loop.fs_scandir_next(iter)
 		if next == nil then
