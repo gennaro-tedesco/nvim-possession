@@ -131,7 +131,6 @@ M.setup = function(user_opts)
 				utils.autosave(user_config)
 			end,
 		})
-	else
 	end
 end
 
