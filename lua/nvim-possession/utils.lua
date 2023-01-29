@@ -53,4 +53,47 @@ M.is_in_list = function(value, list)
 	return false
 end
 
+---if any of the existing sessions contains the cwd
+---then load it on startup directly
+---@param config table
+M.autoload = function(config)
+	local session = M.session_in_cwd(config.sessions.sessions_path)
+	if session ~= nil then
+		vim.cmd.source(config.sessions.sessions_path .. session)
+		vim.g[config.sessions.sessions_variable] = vim.fs.basename(session)
+	end
+	if type(config.post_hook) == "function" then
+		config.post_hook()
+	end
+end
+
+---check if a session is loaded and save it automatically
+---without asking for prompt
+---@param config table
+M.autosave = function(config)
+	local cur_session = vim.g[config.sessions.sessions_variable]
+	if cur_session ~= nil then
+		vim.cmd.mksession({ args = { config.sessions.sessions_path .. cur_session }, bang = true })
+	end
+end
+
+---before switching session perform the following:
+---1) autosave current session
+---2) save and close all modifiable buffers
+---@param config table
+M.autoswitch = function(config)
+	vim.cmd.write()
+	M.autosave(config)
+	vim.cmd.bufdo("e")
+	local buf_list = vim.tbl_filter(function(buf)
+		return vim.api.nvim_buf_is_valid(buf)
+			and vim.api.nvim_buf_get_option(buf, "buflisted")
+			and vim.api.nvim_buf_get_option(buf, "modifiable")
+			and not M.is_in_list(vim.api.nvim_buf_get_option(buf, "filetype"), config.autoswitch.exclude_ft)
+	end, vim.api.nvim_list_bufs())
+	for _, buf in pairs(buf_list) do
+		vim.cmd("bd " .. buf)
+	end
+end
+
 return M
