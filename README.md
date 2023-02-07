@@ -166,10 +166,19 @@ You can call `require("nvim-possession").status()` as component in your statusli
 ```lua
 
 lualine.setup({
-	sections = {
-		lualine_a = ...
-		lualine_b = ...
-		lualine_c = { { "filename", path = 1 }, { "require'nvim-possession'.status()" } },
+    sections = {
+        lualine_a = ...
+        lualine_b = ...
+        lualine_c = {
+            { "filename", path = 1 },
+            {
+                require("nvim-possession").status,
+                cond = function()
+                    return require("nvim-possession").status() ~= nil
+                end,
+            },
+        },
+    }
 })
 ```
 
