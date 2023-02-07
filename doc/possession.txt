@@ -239,7 +239,16 @@ statusline, for example with `lualine` you would have
         sections = {
             lualine_a = ...
             lualine_b = ...
-            lualine_c = { { "filename", path = 1 }, { "require'nvim-possession'.status()" } },
+            lualine_c = {
+                { "filename", path = 1 },
+                {
+                    require("nvim-possession").status,
+                    cond = function()
+                        return require("nvim-possession").status() ~= nil
+                    end,
+                },
+            },
+        }
     })
 <
 
