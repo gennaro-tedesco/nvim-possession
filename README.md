@@ -7,14 +7,11 @@
 </h1>
 
 <h2 align="center">
-  <a href="#" onclick="return false;">
-    <img alt="PR" src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat"/>
-  </a>
-  <a href="#" onclick="return false;">
-    <img alt="lua" src="https://img.shields.io/badge/lua-%232C2D72.svg?&style=flat&logo=lua&logoColor=white"/>
+  <a href="https://luarocks.org/modules/gennaro-tedesco/nvim-possession">
+    <img alt="luarocks" src="https://img.shields.io/luarocks/v/gennaro-tedesco/nvim-possession?logo=lua&color=2aa198"/>
   </a>
   <a href="https://github.com/gennaro-tedesco/nvim-possession/releases">
-    <img alt="releases" src="https://img.shields.io/github/release/gennaro-tedesco/nvim-possession"/>
+    <img alt="releases" src="https://img.shields.io/github/release/gennaro-tedesco/nvim-possession?logo=neovim&color=2aa198"/>
   </a>
 </h2>
 
