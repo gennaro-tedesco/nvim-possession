@@ -32,3 +32,4 @@ jobs:
             fzf-lua
           copy_directories: |
             doc
+          license: "MIT"
