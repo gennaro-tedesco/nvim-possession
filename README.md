@@ -8,10 +8,10 @@
 
 <h2 align="center">
   <a href="https://luarocks.org/modules/gennaro-tedesco/nvim-possession">
-    <img alt="luarocks" src="https://img.shields.io/luarocks/v/gennaro-tedesco/nvim-possession?logo=lua&color=2aa198"/>
+    <img alt="luarocks" src="https://img.shields.io/luarocks/v/gennaro-tedesco/nvim-possession?logo=lua&color=2aa198&style=for-the-badge"/>
   </a>
   <a href="https://github.com/gennaro-tedesco/nvim-possession/releases">
-    <img alt="releases" src="https://img.shields.io/github/release/gennaro-tedesco/nvim-possession?logo=neovim&color=2aa198"/>
+    <img alt="releases" src="https://img.shields.io/github/release/gennaro-tedesco/nvim-possession?logo=neovim&color=2aa198&style=for-the-badge"/>
   </a>
 </h2>
 
