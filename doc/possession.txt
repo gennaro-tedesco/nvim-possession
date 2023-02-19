@@ -1,41 +1,13 @@
-*possession.txt*       For Neovim >= 0.8.0       Last change: 2023 February 18
+*possession.txt*       For Neovim >= 0.8.0       Last change: 2023 February 19
 
 ==============================================================================
 Table of Contents                               *possession-table-of-contents*
 
-  - Installation and quickstart       |possession-installation-and-quickstart|
-  - Usage and advanced configuration|possession-usage-and-advanced-configuration|
-  - Statusline                                         |possession-statusline|
-  - Feedback                                             |possession-feedback|
-
-<h1 align="center">
-
-<br>
-<img width="250" height="250" src="https://user-images.githubusercontent.com/15387611/212337464-ef0a605f-378b-4a6f-aed2-1b6598b28348.png">
-<br>
-nvim-possession
-<br>
-
-</h1>
-
-<h2 align="center">
-
-<a href="https://luarocks.org/modules/gennaro-tedesco/nvim-possession">
-<img alt="luarocks" src="https://img.shields.io/luarocks/v/gennaro-tedesco/nvim-possession?logo=lua&color=2aa198&style=for-the-badge"/>
-</a>
-<a href="https://github.com/gennaro-tedesco/nvim-possession/releases">
-<img alt="releases" src="https://img.shields.io/github/release/gennaro-tedesco/nvim-possession?logo=neovim&color=2aa198&style=for-the-badge"/>
-</a>
-
-</h2>
-
-<h4 align="center">
-
-No-nonsense session manager
-
-</h4>
-
-You are puzzled by neovim sessions and are not using them, are you? Start your
+  - Installation and quickstart   |possession-nil-installation-and-quickstart|
+  - Usage and advanced configuration|possession-nil-usage-and-advanced-configuration|
+  - Statusline                                     |possession-nil-statusline|
+  - Feedback                                         |possession-nil-feedback|
+nvim-possessionNo-nonsense session managerYou are puzzled by neovim sessions and are not using them, are you? Start your
 pos-sessions journey, fear no more!
 
 This plugin is a no-nonsense session manager built on top of fzf-lua
@@ -44,12 +16,8 @@ quick and visually appealing: dynamically browse through your existing
 sessions, create new ones, update and delete with a statusline component to
 remind you of where you are. See for yourself:
 
-<div class="figure">
-<img src="https://user-images.githubusercontent.com/15387611/211946693-7c0a8f00-4ed8-4142-a8aa-a4dc75f42841.gif" title="fig:"/>
-<p class="caption">demo</p>
-</div>
 
-INSTALLATION AND QUICKSTART           *possession-installation-and-quickstart*
+INSTALLATION AND QUICKSTART       *possession-nil-installation-and-quickstart*
 
 Install `nvim-possession` with your favourite plugin manager (`fzf-lua` is
 required) and invoke `require("nvim-possession").setup({})`; in order to avoid
@@ -59,7 +27,6 @@ quickstart configuration is, for instance
 
 
 - with lazy.nvim <https://github.com/folke/lazy.nvim>
-
 
 >lua
     {
@@ -83,16 +50,24 @@ quickstart configuration is, for instance
     }
 <
 
-
 Exposed interfaces
 
-│     function      │                                description                                │                              interaction                              │
-│possession.list()  │list all the existing sessions with fzf-lua; preview shows files in session│<CR> load selected session<br><Ctrl-x> delete selection session        │
-│possession.new()   │prompt for name to create new session                                      │session folder must alredy exist, return a message error otherwise     │
-│possession.update()│update current session (if new buffers are open)                           │do nothing if no session is loaded                                     │
+  -------------------------------------------------------------------------------------
+  function              description                       interaction
+  --------------------- --------------------------------- -----------------------------
+  possession.list()     list all the existing sessions    <CR> load selected
+                        with fzf-lua; preview shows files session<Ctrl-x> delete
+                        in session                        selection session
 
+  possession.new()      prompt for name to create new     session folder must alredy
+                        session                           exist, return a message error
+                                                          otherwise
 
-USAGE AND ADVANCED CONFIGURATION *possession-usage-and-advanced-configuration*
+  possession.update()   update current session (if new    do nothing if no session is
+                        buffers are open)                 loaded
+  -------------------------------------------------------------------------------------
+
+USAGE AND ADVANCED CONFIGURATION*possession-nil-usage-and-advanced-configuration*
 
 As shown above the main use of the plugin is to show all existing sessions (say
 via `<leader>sl`) and load the selected one upon `<CR>`. Once a session is
@@ -153,7 +128,6 @@ directory at startup, specify
     })
 <
 
-
 This autoloads sessions when starting neovim without file arguments (i. e. `$
 nvim`) and in case such sessions explicitly contain a reference to the current
 working directory (you must have `vim.go.ssop+=curdir`); this is by design as
@@ -169,7 +143,6 @@ behaviour), if you want to opt-out specify
     })
 <
 
-
 When switching between sessions it is often desirable to remove pending buffers
 belonging to the previous one, so that only buffers with the new session files
 are loaded. In order to achieve this behaviour specify
@@ -181,7 +154,6 @@ are loaded. In order to achieve this behaviour specify
         }
     })
 <
-
 
 this option autosaves the previous session and deletes all its buffers before
 switching to a new one. If there are some filetypes you want to always keep,
@@ -196,7 +168,6 @@ you may indicate them in
     })
 <
 
-
 A note on lazy loading: this plugin is extremely light weight and it generally
 loads in no time: practically speaking there should not be any need to lazy
 load it on events. If you are however opting in the `autoload = true` feature,
@@ -205,6 +176,7 @@ memory at start-up, thereby also triggering all other buffer related events
 (especially treesitter); this may result in higher start-up times but is
 independent of the plugin (you would get the same loading times by manually
 sourcing the session files).
+
 
 POST-HOOKS ~
 
@@ -225,7 +197,7 @@ finders or set specific options. To do so you can use
 <
 
 
-STATUSLINE                                             *possession-statusline*
+STATUSLINE                                         *possession-nil-statusline*
 
 You can call `require("nvim-possession").status()` as component in your
 statusline, for example with `lualine` you would have
@@ -249,21 +221,22 @@ statusline, for example with `lualine` you would have
     })
 <
 
-
 to display
-
-<p align="center">
-
-<img width="300" height="100" src="https://user-images.githubusercontent.com/15387611/211811964-037c6233-21d6-4ee1-815c-6da068dd3595.png">
 
 the component automatically disappears or changes if you delete the current
 session or switch to another one.
 
-FEEDBACK                                                 *possession-feedback*
+
+FEEDBACK                                             *possession-nil-feedback*
 
 If you find this plugin useful consider awarding it a , it is a great way to
 give feedback! Otherwise, any additional suggestions or merge request is warmly
 welcome!
+
+==============================================================================
+1. Links                                                    *possession-links*
+
+1. *demo*: https://user-images.githubusercontent.com/15387611/211946693-7c0a8f00-4ed8-4142-a8aa-a4dc75f42841.gif
 
 Generated by panvimdoc <https://github.com/kdheepak/panvimdoc>
 
