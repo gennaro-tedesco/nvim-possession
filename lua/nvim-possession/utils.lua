@@ -30,7 +30,7 @@ M.session_in_cwd = function(sessions_path)
 	for _, file in ipairs(vim.fn.readdir(sessions_path)) do
 		for line in io.lines(sessions_path .. file) do
 			if string.find(line, dir_pat) then
-				session_dir = vim.fs.normalize(line:gsub("cd%s*", ""))
+				session_dir = vim.fs.normalize((line:gsub("cd%s*", "")))
 				if session_dir == vim.fn.getcwd() then
 					return file
 				end
