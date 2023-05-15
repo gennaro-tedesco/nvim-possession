@@ -1,13 +1,22 @@
-*possession.txt*       For Neovim >= 0.8.0       Last change: 2023 February 19
+*possession.txt*          For Neovim >= 0.8.0         Last change: 2023 May 15
 
 ==============================================================================
 Table of Contents                               *possession-table-of-contents*
 
-  - Installation and quickstart   |possession-nil-installation-and-quickstart|
-  - Usage and advanced configuration|possession-nil-usage-and-advanced-configuration|
-  - Statusline                                     |possession-nil-statusline|
-  - Feedback                                         |possession-nil-feedback|
-nvim-possessionNo-nonsense session managerYou are puzzled by neovim sessions and are not using them, are you? Start your
+  - Installation and quickstart       |possession-installation-and-quickstart|
+  - Usage and advanced configuration|possession-usage-and-advanced-configuration|
+  - Statusline                                         |possession-statusline|
+  - Feedback                                             |possession-feedback|
+
+
+
+nvim-possession
+
+
+
+
+
+No-nonsense session managerYou are puzzled by neovim sessions and are not using them, are you? Start your
 pos-sessions journey, fear no more!
 
 This plugin is a no-nonsense session manager built on top of fzf-lua
@@ -17,14 +26,13 @@ sessions, create new ones, update and delete with a statusline component to
 remind you of where you are. See for yourself:
 
 
-INSTALLATION AND QUICKSTART       *possession-nil-installation-and-quickstart*
+INSTALLATION AND QUICKSTART           *possession-installation-and-quickstart*
 
 Install `nvim-possession` with your favourite plugin manager (`fzf-lua` is
 required) and invoke `require("nvim-possession").setup({})`; in order to avoid
 conflicts with your own keymaps we do not set any mappings but only expose the
 interfaces, which means you would need to define them yourself. The suggested
 quickstart configuration is, for instance
-
 
 - with lazy.nvim <https://github.com/folke/lazy.nvim>
 
@@ -46,6 +54,9 @@ quickstart configuration is, for instance
             vim.keymap.set("n", "<leader>su", function()
                 possession.update()
             end)
+            vim.keymap.set("n", "<leader>sd", function()
+                possession.delete()
+            end)
         end,
     }
 <
@@ -65,9 +76,12 @@ Exposed interfaces
 
   possession.update()   update current session (if new    do nothing if no session is
                         buffers are open)                 loaded
+
+  possession.delete()   delete current session (without   do nothing if no session is
+                        prompt)                           loaded
   -------------------------------------------------------------------------------------
 
-USAGE AND ADVANCED CONFIGURATION*possession-nil-usage-and-advanced-configuration*
+USAGE AND ADVANCED CONFIGURATION *possession-usage-and-advanced-configuration*
 
 As shown above the main use of the plugin is to show all existing sessions (say
 via `<leader>sl`) and load the selected one upon `<CR>`. Once a session is
@@ -197,7 +211,7 @@ finders or set specific options. To do so you can use
 <
 
 
-STATUSLINE                                         *possession-nil-statusline*
+STATUSLINE                                             *possession-statusline*
 
 You can call `require("nvim-possession").status()` as component in your
 statusline, for example with `lualine` you would have
@@ -227,7 +241,7 @@ the component automatically disappears or changes if you delete the current
 session or switch to another one.
 
 
-FEEDBACK                                             *possession-nil-feedback*
+FEEDBACK                                                 *possession-feedback*
 
 If you find this plugin useful consider awarding it a , it is a great way to
 give feedback! Otherwise, any additional suggestions or merge request is warmly
