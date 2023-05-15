@@ -47,6 +47,9 @@ Install `nvim-possession` with your favourite plugin manager (`fzf-lua` is requi
         vim.keymap.set("n", "<leader>su", function()
             possession.update()
         end)
+        vim.keymap.set("n", "<leader>sd", function()
+            possession.delete()
+        end)
     end,
 }
 ```
@@ -58,6 +61,7 @@ Exposed interfaces
 | possession.list()   | list all the existing sessions with fzf-lua; preview shows files in session | `<CR>` load selected session<br>`<Ctrl-x>` delete selection session |
 | possession.new()    | prompt for name to create new session                                       | session folder must alredy exist, return a message error otherwise  |
 | possession.update() | update current session (if new buffers are open)                            | do nothing if no session is loaded                                  |
+| possession.delete() | delete current session (without prompt)                                     | do nothing if no session is loaded                                  |
 
 ## 🛠 Usage and advanced configuration
 

@@ -77,7 +77,7 @@ M.setup = function(user_opts)
 
 	---delete selected session
 	---@param selected string
-	M.delete = function(selected)
+	M.delete_selected = function(selected)
 		local session = user_config.sessions.sessions_path .. selected[1]
 		local confirm = vim.fn.confirm("delete session?", "&Yes\n&No", 2)
 		if confirm == 1 then
@@ -88,7 +88,26 @@ M.setup = function(user_opts)
 			end
 		end
 	end
-	fzf.config.set_action_helpstr(M.delete, "delete-session")
+	fzf.config.set_action_helpstr(M.delete_selected, "delete-session")
+
+	--delete current active session
+	M.delete_current = function()
+		local session_path = user_config.sessions.sessions_path
+		local session_name = vim.g[user_config.sessions.sessions_variable]
+		if session_name ~= nil then
+			local confirm = vim.fn.confirm("delete session " .. session_name .. "?", "&Yes\n&No", 2)
+			if confirm == 1 then
+				local cur_session = session_path .. session_name
+				os.remove(cur_session)
+				print("deleted " .. cur_session)
+				if vim.g[user_config.sessions.sessions_variable] == vim.fs.basename(cur_session) then
+					vim.g[user_config.sessions.sessions_variable] = nil
+				end
+			end
+		else
+			print("no active session")
+		end
+	end
 
 	---list all existing sessions and their files
 	---return fzf picker
@@ -116,7 +135,7 @@ M.setup = function(user_opts)
 			cwd = user_config.sessions.sessions_path,
 			actions = {
 				["default"] = M.load,
-				["ctrl-x"] = { M.delete, fzf.actions.resume },
+				["ctrl-x"] = { M.delete_selected, fzf.actions.resume },
 			},
 		})
 	end
