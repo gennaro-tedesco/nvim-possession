@@ -1,4 +1,4 @@
-*possession.txt*          For Neovim >= 0.8.0         Last change: 2023 May 16
+*possession.txt*         For Neovim >= 0.8.0         Last change: 2023 June 13
 
 ==============================================================================
 Table of Contents                               *possession-table-of-contents*
