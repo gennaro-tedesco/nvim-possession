@@ -126,6 +126,7 @@ M.setup = function(user_opts)
 			user_config = user_config,
 			prompt = user_config.sessions.sessions_icon .. "sessions:",
 			file_icons = false,
+			git_icons = false,
 			show_cwd_header = false,
 			preview_opts = "nohidden",
 
