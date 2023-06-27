@@ -62,8 +62,8 @@ M.autoload = function(config)
 		vim.cmd.source(config.sessions.sessions_path .. session)
 		vim.g[config.sessions.sessions_variable] = vim.fs.basename(session)
 	end
-	if type(config.post_hook) == "function" then
-		config.post_hook()
+	if type(config.post_load_hook) == "function" then
+		config.post_load_hook()
 	end
 end
 
@@ -72,6 +72,9 @@ end
 ---@param config table
 M.autosave = function(config)
 	local cur_session = vim.g[config.sessions.sessions_variable]
+	if type(config.pre_save_hook) == "function" then
+		config.pre_save_hook()
+	end
 	if cur_session ~= nil then
 		vim.cmd.mksession({ args = { config.sessions.sessions_path .. cur_session }, bang = true })
 	end

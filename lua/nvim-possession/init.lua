@@ -52,6 +52,9 @@ M.setup = function(user_opts)
 		if cur_session ~= nil then
 			local confirm = vim.fn.confirm("overwrite session?", "&Yes\n&No", 2)
 			if confirm == 1 then
+				if type(user_config.pre_save_hook) == "function" then
+					user_config.pre_save_hook()
+				end
 				vim.cmd.mksession({ args = { user_config.sessions.sessions_path .. cur_session }, bang = true })
 				print("updated session: " .. cur_session)
 			end
@@ -69,8 +72,8 @@ M.setup = function(user_opts)
 		end
 		vim.cmd.source(session)
 		vim.g[user_config.sessions.sessions_variable] = vim.fs.basename(session)
-		if type(user_config.post_hook) == "function" then
-			user_config.post_hook()
+		if type(user_config.post_load_hook) == "function" then
+			user_config.post_load_hook()
 		end
 	end
 	fzf.config.set_action_helpstr(M.load, "load-session")
