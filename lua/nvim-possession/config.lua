@@ -13,6 +13,7 @@ M.autoswitch = {
 	exclude_ft = {},
 }
 
+M.save_hook = nil
 M.post_hook = nil
 
 M.fzf_winopts = {

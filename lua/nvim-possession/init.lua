@@ -52,6 +52,9 @@ M.setup = function(user_opts)
 		if cur_session ~= nil then
 			local confirm = vim.fn.confirm("overwrite session?", "&Yes\n&No", 2)
 			if confirm == 1 then
+				if type(user_config.save_hook) == "function" then
+					user_config.save_hook()
+				end
 				vim.cmd.mksession({ args = { user_config.sessions.sessions_path .. cur_session }, bang = true })
 				print("updated session: " .. cur_session)
 			end

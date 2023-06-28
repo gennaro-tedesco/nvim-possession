@@ -72,6 +72,9 @@ end
 ---@param config table
 M.autosave = function(config)
 	local cur_session = vim.g[config.sessions.sessions_variable]
+	if type(config.save_hook) == "function" then
+		config.save_hook()
+	end
 	if cur_session ~= nil then
 		vim.cmd.mksession({ args = { config.sessions.sessions_path .. cur_session }, bang = true })
 	end
