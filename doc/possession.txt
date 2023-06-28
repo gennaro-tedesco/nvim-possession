@@ -113,9 +113,9 @@ however if you really want to do so:
             exclude_ft = {}, -- list of filetypes to exclude from autoswitch
         }
 
-	pre_save_hook = nil -- callback, function to execute before saving a session
+	save_hook = nil -- callback, function to execute before saving a session
 			-- useful to update or cleanup global variables for example
-	post_load_hook = nil -- callback, function to execute after loading a session
+	post_hook = nil -- callback, function to execute after loading a session
                         -- useful to restore file trees, file managers or terminals
                         -- function()
                         --     require('FTerm').open()
@@ -193,7 +193,7 @@ memory at start-up, thereby also triggering all other buffer related events
 independent of the plugin (you would get the same loading times by manually
 sourcing the session files).
 
-PRE-SAVE-HOOK ~
+SAVE-HOOK ~
 
 Before saving a session, you can run actions that may update state or perform
 cleanup before updating the session.
@@ -205,7 +205,7 @@ you want to keep the tabline clean. To do so, you can use:
 >lua
 
     require("nvim-possession").setup({
-	pre_save_hook = function()
+	save_hook = function()
 	    -- Get visible buffers
 	    local visible_buffers = {}
 	    for _, win in ipairs(vim.api.nvim_list_wins()) do
@@ -223,7 +223,7 @@ you want to keep the tabline clean. To do so, you can use:
 
 
 
-POST-LOAD-HOOK ~
+POST-HOOK ~
 
 After loading a session you may want to specify additional actions to run that
 may not be have been saved in the session content: this is often the case for

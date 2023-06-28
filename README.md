@@ -85,9 +85,9 @@ require("nvim-possession").setup({
         exclude_ft = {}, -- list of filetypes to exclude from autoswitch
     }
 
-    pre_save_hook = nil -- callback, function to execute before saving a session
+    save_hook = nil -- callback, function to execute before saving a session
                     -- useful to update or cleanup global variables for example
-    post_load_hook = nil -- callback, function to execute after loading a session
+    post_hook = nil -- callback, function to execute after loading a session
                     -- useful to restore file trees, file managers or terminals
                     -- function()
                     --     require('FTerm').open()
@@ -147,7 +147,7 @@ require("nvim-possession").setup({
 
 A note on lazy loading: this plugin is extremely light weight and it generally loads in no time: practically speaking there should not be any need to lazy load it on events. If you are however opting in the `autoload = true` feature, notice that by definition such a feature loads the existing session buffers in memory at start-up, thereby also triggering all other buffer related events (especially treesitter); this may result in higher start-up times but is independent of the plugin (you would get the same loading times by manually sourcing the session files).
 
-### Pre-save-hook
+### Save-hook
 
 Before saving a session, you can run actions that may update state or perform cleanup before updating the session.
 
@@ -155,7 +155,7 @@ For example, you may want to only save visible buffers to the session. This coul
 
 ```lua
 require("nvim-possession").setup({
-    pre_save_hook = function()
+    save_hook = function()
         -- Get visible buffers
         local visible_buffers = {}
         for _, win in ipairs(vim.api.nvim_list_wins()) do
@@ -173,14 +173,14 @@ require("nvim-possession").setup({
 
 ```
 
-### Post-load-hook
+### Post-hook
 
 After loading a session you may want to specify additional actions to run that may not be have been saved in the session content: this is often the case for restoring file tree or file managers, or open up terminal windows or fuzzy finders or set specific options. To do so you can use
 
 ```lua
 
 require("nvim-possession").setup({
-    post_load_hook = function()
+    post_hook = function()
         require("FTerm").open()
         require('nvim-tree').toggle(false, true)
         vim.lsp.buf.format()

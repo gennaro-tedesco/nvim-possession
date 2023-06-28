@@ -13,8 +13,8 @@ M.autoswitch = {
 	exclude_ft = {},
 }
 
-M.pre_save_hook = nil
-M.post_load_hook = nil
+M.save_hook = nil
+M.post_hook = nil
 
 M.fzf_winopts = {
 	hl = { normal = "Normal" },
