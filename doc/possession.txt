@@ -1,4 +1,4 @@
-*possession.txt*         For Neovim >= 0.8.0         Last change: 2023 June 28
+*possession.txt*       For Neovim >= 0.8.0      Last change: 2023 September 11
 
 ==============================================================================
 Table of Contents                               *possession-table-of-contents*
@@ -102,8 +102,9 @@ however if you really want to do so:
     require("nvim-possession").setup({
         sessions = {
             sessions_path = ... -- folder to look for sessions, must be a valid existing path
-            sessions_variable = .. -- defines vim.g[sessions_variable] when a session is loaded
-            sessions_icon = ...
+            sessions_variable = ... -- defines vim.g[sessions_variable] when a session is loaded
+            sessions_icon = ...-- string: shows icon both in the prompt and in the statusline
+            sessions_prompt = ... -- fzf prompt string
         },
     
         autoload = false, -- whether to autoload sessions in the cwd at startup
