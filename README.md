@@ -74,8 +74,9 @@ Default configurations can be found in the [config](https://github.com/gennaro-t
 require("nvim-possession").setup({
     sessions = {
         sessions_path = ... -- folder to look for sessions, must be a valid existing path
-        sessions_variable = .. -- defines vim.g[sessions_variable] when a session is loaded
-        sessions_icon = ...
+        sessions_variable = ... -- defines vim.g[sessions_variable] when a session is loaded
+        sessions_icon = ...-- string: shows icon both in the prompt and in the statusline
+        sessions_prompt = ... -- fzf prompt string
     },
 
     autoload = false, -- whether to autoload sessions in the cwd at startup

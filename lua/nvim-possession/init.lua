@@ -127,7 +127,7 @@ M.setup = function(user_opts)
 
 		return fzf.files({
 			user_config = user_config,
-			prompt = user_config.sessions.sessions_icon .. "sessions:",
+			prompt = user_config.sessions.sessions_icon .. user_config.sessions.sessions_prompt,
 			cwd_prompt = false,
 			file_icons = false,
 			git_icons = false,
