@@ -1,5 +1,4 @@
 local config = require("nvim-possession.config")
-local ui = require("nvim-possession.ui")
 local utils = require("nvim-possession.utils")
 
 local M = {}
@@ -124,6 +123,8 @@ M.setup = function(user_opts)
 			print("no saved sessions")
 			return
 		end
+
+		local ui = require("nvim-possession.ui")
 
 		return fzf.files({
 			user_config = user_config,
