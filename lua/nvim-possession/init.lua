@@ -138,7 +138,7 @@ M.setup = function(user_opts)
 			winopts = user_config.fzf_winopts,
 			cwd = user_config.sessions.sessions_path,
 			actions = {
-				["default"] = M.load,
+				["enter"] = M.load,
 				["ctrl-x"] = { M.delete_selected, fzf.actions.resume },
 			},
 		})
