@@ -4,6 +4,9 @@ local M = {}
 ---@param file string
 ---@return table
 M.session_files = function(file)
+	if vim.fn.isdirectory(file) == 1 then
+		return {}
+	end
 	local lines = {}
 	local cwd, cwd_pat = "", "^cd%s*"
 	local buf_pat = "^badd%s*%+%d+%s*"
