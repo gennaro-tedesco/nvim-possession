@@ -18,11 +18,12 @@ M.save_hook = nil
 M.post_hook = nil
 
 M.fzf_winopts = {
-	hl = { normal = "Normal" },
+	hls = { normal = "Normal" },
 	border = "rounded",
 	height = 0.5,
 	width = 0.25,
 	preview = {
+		hidden = "nohidden",
 		horizontal = "down:40%",
 	},
 }
