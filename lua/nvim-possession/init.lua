@@ -131,10 +131,10 @@ M.setup = function(user_opts)
 			cwd_prompt = false,
 			file_icons = false,
 			git_icons = false,
-			show_cwd_header = false,
-			preview_opts = "nohidden",
+			cwd_header = false,
 
 			previewer = ui.session_previewer,
+			hls = user_config.fzf_hls,
 			winopts = user_config.fzf_winopts,
 			cwd = user_config.sessions.sessions_path,
 			actions = {

@@ -95,6 +95,14 @@ require("nvim-possession").setup({
                     --     require('nvim-tree').toggle(false, true)
                     -- end
 
+    ---@type possession.Hls
+    fzf_hls = { -- highlight groups for the sessions and preview windows
+        normal = "Normal",
+        preview_normal = "Normal",
+        border = "Todo",
+        preview_border = "Constant",
+    },
+    ---@type possession.Winopts
     fzf_winopts = {
         -- any valid fzf-lua winopts options, for instance
         width = 0.5,
