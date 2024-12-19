@@ -1,4 +1,4 @@
-*possession.txt*       For Neovim >= 0.8.0      Last change: 2023 September 12
+*possession.txt*       For Neovim >= 0.8.0       Last change: 2024 December 18
 
 ==============================================================================
 Table of Contents                               *possession-table-of-contents*
@@ -7,6 +7,7 @@ Table of Contents                               *possession-table-of-contents*
   - Usage and advanced configuration|possession-usage-and-advanced-configuration|
   - Statusline                                         |possession-statusline|
   - Feedback                                             |possession-feedback|
+1. Links                                                    |possession-links|
 
 
 
@@ -123,6 +124,14 @@ however if you really want to do so:
                         --     require('nvim-tree').toggle(false, true)
                         -- end
     
+        ---@type possession.Hls
+        fzf_hls = { -- highlight groups for the sessions and preview windows
+            normal = "Normal",
+            preview_normal = "Normal",
+            border = "Todo",
+            preview_border = "Constant",
+        },
+        ---@type possession.Winopts
         fzf_winopts = {
             -- any valid fzf-lua winopts options, for instance
             width = 0.5,
@@ -134,7 +143,7 @@ however if you really want to do so:
 <
 
 
-🪄 AUTOMAGIC ~
+AUTOMAGIC ~
 
 If you want to automatically load sessions defined for the current working
 directory at startup, specify
