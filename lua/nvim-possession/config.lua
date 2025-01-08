@@ -35,6 +35,8 @@ M.fzf_hls = {
 ---@field width? number Width of the fzf window
 ---@field preview? table
 M.fzf_winopts = {
+	title = " sessions 📌 ",
+	title_pos = "center",
 	border = "rounded",
 	height = 0.5,
 	width = 0.25,
