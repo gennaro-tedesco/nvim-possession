@@ -21,7 +21,7 @@ M.session_previewer.populate_preview_buf = function(self, entry_str)
 
 	vim.api.nvim_buf_set_lines(tmpbuf, 0, -1, false, files)
 	self:set_preview_buf(tmpbuf)
-	self.win:update_scrollbar()
+	self.win:update_preview_scrollbar()
 end
 
 M.session_previewer.gen_winopts = function(self)
