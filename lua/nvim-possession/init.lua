@@ -45,6 +45,7 @@ M.setup = function(user_opts)
 			end
 		end
 	end
+	fzf.config.set_action_helpstr(M.new, "new-session")
 
 	---update loaded session with current status
 	M.update = function()
@@ -125,7 +126,7 @@ M.setup = function(user_opts)
 			return
 		end
 
-		return fzf.files({
+		local opts = {
 			user_config = user_config,
 			prompt = user_config.sessions.sessions_icon .. user_config.sessions.sessions_prompt,
 			cwd_prompt = false,
@@ -139,9 +140,13 @@ M.setup = function(user_opts)
 			cwd = user_config.sessions.sessions_path,
 			actions = {
 				["enter"] = M.load,
-				["ctrl-x"] = { M.delete_selected, fzf.actions.resume },
+				["ctrl-x"] = { fn = M.delete_selected, reload = true, header = "delete session" },
+				["ctrl-n"] = { fn = M.new, header = "new session" },
 			},
-		})
+		}
+		opts = require("fzf-lua.config").normalize_opts(opts, {})
+		opts = require("fzf-lua.core").set_header(opts, { "actions" })
+		fzf.fzf_exec("ls -t", opts)
 	end
 
 	if user_config.autoload and vim.fn.argc() == 0 then
