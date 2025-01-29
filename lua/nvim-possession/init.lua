@@ -126,6 +126,31 @@ M.setup = function(user_opts)
 			return
 		end
 
+		local function list_sessions(fzf_cb)
+			local sessions = {}
+			for name, type in vim.fs.dir(user_config.sessions.sessions_path, { depth = math.huge }) do
+				if type == "file" then
+					local stat = vim.uv.fs_stat(user_config.sessions.sessions_path .. name)
+					if stat then
+						table.insert(sessions, { name = name, mtime = stat.mtime })
+					end
+				end
+			end
+			table.sort(sessions, function(a, b)
+				if a.mtime.sec ~= b.mtime.sec then
+					return a.mtime.sec > b.mtime.sec
+				end
+				if a.mtime.nsec ~= b.mtime.nsec then
+					return a.mtime.nsec > b.mtime.nsec
+				end
+				return a.name < b.name
+			end)
+			for _, sess in ipairs(sessions) do
+				fzf_cb(sess.name)
+			end
+			fzf_cb()
+		end
+
 		local opts = {
 			user_config = user_config,
 			prompt = user_config.sessions.sessions_icon .. user_config.sessions.sessions_prompt,
@@ -140,13 +165,13 @@ M.setup = function(user_opts)
 			cwd = user_config.sessions.sessions_path,
 			actions = {
 				["enter"] = M.load,
-				["ctrl-x"] = { fn = M.delete_selected, reload = true, header = "delete session" },
+				["ctrl-x"] = { M.delete_selected, fzf.actions.resume, header = "delete session" },
 				["ctrl-n"] = { fn = M.new, header = "new session" },
 			},
 		}
 		opts = require("fzf-lua.config").normalize_opts(opts, {})
 		opts = require("fzf-lua.core").set_header(opts, { "actions" })
-		fzf.fzf_exec("ls -t", opts)
+		fzf.fzf_exec(list_sessions, opts)
 	end
 
 	if user_config.autoload and vim.fn.argc() == 0 then
