@@ -1,3 +1,5 @@
+local sort = require("nvim-possession.sorting")
+
 local M = {}
 
 M.sessions = {
@@ -45,5 +47,7 @@ M.fzf_winopts = {
 		horizontal = "down:40%",
 	},
 }
+
+M.sort = sort.alpha_sort
 
 return M

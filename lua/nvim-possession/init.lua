@@ -115,12 +115,12 @@ M.setup = function(user_opts)
 	---list all existing sessions and their files
 	---return fzf picker
 	M.list = function()
-		local iter = vim.loop.fs_scandir(user_config.sessions.sessions_path)
+		local iter = vim.uv.fs_scandir(user_config.sessions.sessions_path)
 		if iter == nil then
 			print("session folder " .. user_config.sessions.sessions_path .. " does not exist")
 			return
 		end
-		local next = vim.loop.fs_scandir_next(iter)
+		local next = vim.uv.fs_scandir_next(iter)
 		if next == nil then
 			print("no saved sessions")
 			return
@@ -128,7 +128,7 @@ M.setup = function(user_opts)
 
 		local function list_sessions(fzf_cb)
 			local sessions = {}
-			for name, type in vim.fs.dir(user_config.sessions.sessions_path, { depth = math.huge }) do
+			for name, type in vim.fs.dir(user_config.sessions.sessions_path) do
 				if type == "file" then
 					local stat = vim.uv.fs_stat(user_config.sessions.sessions_path .. name)
 					if stat then
@@ -137,13 +137,7 @@ M.setup = function(user_opts)
 				end
 			end
 			table.sort(sessions, function(a, b)
-				if a.mtime.sec ~= b.mtime.sec then
-					return a.mtime.sec > b.mtime.sec
-				end
-				if a.mtime.nsec ~= b.mtime.nsec then
-					return a.mtime.nsec > b.mtime.nsec
-				end
-				return a.name < b.name
+				return user_config.sort(a, b)
 			end)
 			for _, sess in ipairs(sessions) do
 				fzf_cb(sess.name)
@@ -158,6 +152,7 @@ M.setup = function(user_opts)
 			file_icons = false,
 			git_icons = false,
 			cwd_header = false,
+			no_header = true,
 
 			previewer = ui.session_previewer,
 			hls = user_config.fzf_hls,

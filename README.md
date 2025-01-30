@@ -36,21 +36,12 @@ Install `nvim-possession` with your favourite plugin manager (`fzf-lua` is requi
         "ibhagwan/fzf-lua",
     },
     config = true,
-    init = function()
-        local possession = require("nvim-possession")
-        vim.keymap.set("n", "<leader>sl", function()
-            possession.list()
-        end)
-        vim.keymap.set("n", "<leader>sn", function()
-            possession.new()
-        end)
-        vim.keymap.set("n", "<leader>su", function()
-            possession.update()
-        end)
-        vim.keymap.set("n", "<leader>sd", function()
-            possession.delete()
-        end)
-    end,
+    keys = {
+        { "<leader>sl", function() require("nvim-possession").list() end, desc = "📌list sessions", },
+        { "<leader>sn", function() require("nvim-possession").new() end, desc = "📌create new session", },
+        { "<leader>su", function() require("nvim-possession").update() end, desc = "📌update current session", },
+        { "<leader>sd", function() require("nvim-possession").delete() end, desc = "📌delete selected session"},
+    },
 }
 ```
 
@@ -110,6 +101,9 @@ require("nvim-possession").setup({
             vertical = "right:30%"
         }
     }
+    sort = require("nvim-possession.sorting").alpha_sort -- callback, sorting function to list sessions
+                                                         -- require("nvim-possession.sorting").time_sort
+                                                         -- to sort by last updated instead
 })
 ```
 
