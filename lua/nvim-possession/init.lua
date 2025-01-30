@@ -1,6 +1,7 @@
 local config = require("nvim-possession.config")
 local ui = require("nvim-possession.ui")
 local utils = require("nvim-possession.utils")
+local sort = require("nvim-possession.sorting")
 
 local M = {}
 
@@ -137,7 +138,11 @@ M.setup = function(user_opts)
 				end
 			end
 			table.sort(sessions, function(a, b)
-				return user_config.sort(a, b)
+				if type(user_config.sort) == "function" then
+					return user_config.sort(a, b)
+				else
+					return sort.alpha_sort(a, b)
+				end
 			end)
 			for _, sess in ipairs(sessions) do
 				fzf_cb(sess.name)
