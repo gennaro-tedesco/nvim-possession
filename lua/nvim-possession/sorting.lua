@@ -11,6 +11,7 @@ M.time_sort = function(a, b)
 	if a.mtime.nsec ~= b.mtime.nsec then
 		return a.mtime.nsec > b.mtime.nsec
 	end
+	return M.alpha_sort(a, b)
 end
 
 ---sort sessions by name
