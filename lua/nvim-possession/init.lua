@@ -114,12 +114,12 @@ M.setup = function(user_opts)
 	---list all existing sessions and their files
 	---return fzf picker
 	M.list = function()
-		local iter = vim.loop.fs_scandir(user_config.sessions.sessions_path)
+		local iter = vim.uv.fs_scandir(user_config.sessions.sessions_path)
 		if iter == nil then
 			print("session folder " .. user_config.sessions.sessions_path .. " does not exist")
 			return
 		end
-		local next = vim.loop.fs_scandir_next(iter)
+		local next = vim.uv.fs_scandir_next(iter)
 		if next == nil then
 			print("no saved sessions")
 			return
