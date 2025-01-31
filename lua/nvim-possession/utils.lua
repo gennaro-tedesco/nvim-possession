@@ -34,7 +34,7 @@ M.session_in_cwd = function(sessions_path)
 		if type == "file" then
 			for line in io.lines(sessions_path .. file) do
 				if string.find(line, dir_pat) then
-					session_dir = vim.fs.normalize((line:gsub("cd%s*", "")))
+					session_dir = vim.uv.fs_realpath(vim.fs.normalize((line:gsub("cd%s*", ""))))
 					if session_dir == vim.fn.getcwd() then
 						return file
 					end
