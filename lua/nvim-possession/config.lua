@@ -1,3 +1,5 @@
+local sort = require("nvim-possession.sorting")
+
 local M = {}
 
 M.sessions = {
@@ -14,7 +16,9 @@ M.autoswitch = {
 	exclude_ft = {},
 }
 
+---@type function
 M.save_hook = nil
+---@type function
 M.post_hook = nil
 
 ---@class possession.Hls
@@ -45,5 +49,8 @@ M.fzf_winopts = {
 		horizontal = "down:40%",
 	},
 }
+
+---@type function
+M.sort = sort.alpha_sort
 
 return M

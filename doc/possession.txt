@@ -1,4 +1,4 @@
-*possession.txt*       For Neovim >= 0.8.0       Last change: 2024 December 19
+*possession.txt*        For Neovim >= 0.8.0       Last change: 2025 January 31
 
 ==============================================================================
 Table of Contents                               *possession-table-of-contents*
@@ -44,21 +44,12 @@ quickstart configuration is, for instance
             "ibhagwan/fzf-lua",
         },
         config = true,
-        init = function()
-            local possession = require("nvim-possession")
-            vim.keymap.set("n", "<leader>sl", function()
-                possession.list()
-            end)
-            vim.keymap.set("n", "<leader>sn", function()
-                possession.new()
-            end)
-            vim.keymap.set("n", "<leader>su", function()
-                possession.update()
-            end)
-            vim.keymap.set("n", "<leader>sd", function()
-                possession.delete()
-            end)
-        end,
+        keys = {
+            { "<leader>sl", function() require("nvim-possession").list() end, desc = "📌list sessions", },
+            { "<leader>sn", function() require("nvim-possession").new() end, desc = "📌create new session", },
+            { "<leader>su", function() require("nvim-possession").update() end, desc = "📌update current session", },
+            { "<leader>sd", function() require("nvim-possession").delete() end, desc = "📌delete selected session"},
+        },
     }
 <
 
@@ -139,6 +130,9 @@ however if you really want to do so:
                 vertical = "right:30%"
             }
         }
+        sort = require("nvim-possession.sorting").alpha_sort -- callback, sorting function to list sessions
+                                                             -- require("nvim-possession.sorting").time_sort
+                                                             -- to sort by last updated instead
     })
 <
 

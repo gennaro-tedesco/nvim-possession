@@ -1,6 +1,7 @@
 local config = require("nvim-possession.config")
 local ui = require("nvim-possession.ui")
 local utils = require("nvim-possession.utils")
+local sort = require("nvim-possession.sorting")
 
 local M = {}
 
@@ -45,6 +46,7 @@ M.setup = function(user_opts)
 			end
 		end
 	end
+	fzf.config.set_action_helpstr(M.new, "new-session")
 
 	---update loaded session with current status
 	M.update = function()
@@ -125,13 +127,37 @@ M.setup = function(user_opts)
 			return
 		end
 
-		return fzf.files({
+		local function list_sessions(fzf_cb)
+			local sessions = {}
+			for name, type in vim.fs.dir(user_config.sessions.sessions_path) do
+				if type == "file" then
+					local stat = vim.uv.fs_stat(user_config.sessions.sessions_path .. name)
+					if stat then
+						table.insert(sessions, { name = name, mtime = stat.mtime })
+					end
+				end
+			end
+			table.sort(sessions, function(a, b)
+				if type(user_config.sort) == "function" then
+					return user_config.sort(a, b)
+				else
+					return sort.alpha_sort(a, b)
+				end
+			end)
+			for _, sess in ipairs(sessions) do
+				fzf_cb(sess.name)
+			end
+			fzf_cb()
+		end
+
+		local opts = {
 			user_config = user_config,
 			prompt = user_config.sessions.sessions_icon .. user_config.sessions.sessions_prompt,
 			cwd_prompt = false,
 			file_icons = false,
 			git_icons = false,
 			cwd_header = false,
+			no_header = true,
 
 			previewer = ui.session_previewer,
 			hls = user_config.fzf_hls,
@@ -139,9 +165,13 @@ M.setup = function(user_opts)
 			cwd = user_config.sessions.sessions_path,
 			actions = {
 				["enter"] = M.load,
-				["ctrl-x"] = { M.delete_selected, fzf.actions.resume },
+				["ctrl-x"] = { M.delete_selected, fzf.actions.resume, header = "delete session" },
+				["ctrl-n"] = { fn = M.new, header = "new session" },
 			},
-		})
+		}
+		opts = require("fzf-lua.config").normalize_opts(opts, {})
+		opts = require("fzf-lua.core").set_header(opts, { "actions" })
+		fzf.fzf_exec(list_sessions, opts)
 	end
 
 	if user_config.autoload and vim.fn.argc() == 0 then
