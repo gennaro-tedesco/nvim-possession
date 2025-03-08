@@ -69,6 +69,17 @@ M.setup = function(user_opts)
 
 	fzf.config.set_action_helpstr(M.new, "new-session")
 
+	vim.api.nvim_create_user_command("CreateSession", function(opts)
+		local session_name = opts.args
+		if session_name == "" then
+			print("❌ Please provide a session name.")
+			return
+		end
+
+		-- Call the session creation function
+		M.create(session_name)
+	end, { nargs = 1 }) -- `nargs = 1` ensures exactly one argument is required
+
 	---update loaded session with current status
 	M.update = function()
 		local cur_session = vim.g[user_config.sessions.sessions_variable]
