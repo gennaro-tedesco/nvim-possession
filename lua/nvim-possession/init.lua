@@ -46,6 +46,24 @@ M.setup = function(user_opts)
 			end
 		end
 	end
+	M.create = function(name)
+		if name == "" then
+			print("Invalid session name")
+			return
+		end
+
+		local session_file = user_config.sessions.sessions_path .. name
+
+		-- Check if session already exists
+		if next(vim.fs.find(name, { path = user_config.sessions.sessions_path })) == nil then
+			vim.cmd.mksession({ args = { session_file } })
+			vim.g[user_config.sessions.sessions_variable] = vim.fs.basename(name)
+			print("💾 Session saved in: " .. session_file)
+		else
+			print("⚠️ Session '" .. name .. "' already exists")
+		end
+	end
+
 	fzf.config.set_action_helpstr(M.new, "new-session")
 
 	---update loaded session with current status
@@ -184,9 +202,7 @@ M.setup = function(user_opts)
 		vim.api.nvim_create_autocmd("VimLeave", {
 			group = autosave_possession,
 			desc = "📌 save session on VimLeave",
-			callback = function()
-				utils.autosave(user_config)
-			end,
+			callback = function() utils.autosave(user_config) end,
 		})
 	end
 end
