@@ -46,21 +46,24 @@ M.setup = function(user_opts)
 			end
 		end
 	end
-	M.create = function(name)
-		if name == "" then
+
+	M.create = function(session_name)
+		if session_name == "" then
 			print("Invalid session name")
 			return
 		end
 
-		local session_file = user_config.sessions.sessions_path .. name
+		print("💾 session name is : " .. session_name)
+		local session_file = user_config.sessions.sessions_path .. session_name
+		print("💾 Session file is: " .. session_file)
 
 		-- Check if session already exists
-		if next(vim.fs.find(name, { path = user_config.sessions.sessions_path })) == nil then
+		if next(vim.fs.find(session_name, { path = user_config.sessions.sessions_path })) == nil then
 			vim.cmd.mksession({ args = { session_file } })
-			vim.g[user_config.sessions.sessions_variable] = vim.fs.basename(name)
+			vim.g[user_config.sessions.sessions_variable] = vim.fs.basename(session_name)
 			print("💾 Session saved in: " .. session_file)
 		else
-			print("⚠️ Session '" .. name .. "' already exists")
+			print("⚠️ Session '" .. session_name .. "' already exists")
 		end
 	end
 
