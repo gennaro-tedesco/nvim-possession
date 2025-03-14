@@ -25,24 +25,28 @@ M.session_files = function(file)
 	return buffers
 end
 
----return the first session whose dir corresponds to cwd
+---return the all sessions whose dir corresponds to cwd
 ---@param sessions_path string
----@return string|nil
-M.session_in_cwd = function(sessions_path)
-	local session_dir, dir_pat = "", "^cd%s*"
-	for file, type in vim.fs.dir(sessions_path) do
-		if type == "file" then
-			for line in io.lines(sessions_path .. file) do
-				if string.find(line, dir_pat) then
-					session_dir = vim.uv.fs_realpath(vim.fs.normalize((line:gsub("cd%s*", ""))))
-					if session_dir == vim.fn.getcwd() then
-						return file
-					end
-				end
-			end
-		end
-	end
-	return nil
+---@return table
+M.sessions_in_cwd = function(sessions_path)
+    local session_dir, dir_pat = "", "^cd%s*"
+    local sessions = {}
+    for file, type in vim.fs.dir(sessions_path) do
+        if type == "file" then
+            for line in io.lines(sessions_path .. file) do
+                if string.find(line, dir_pat) then
+                    session_dir = vim.uv.fs_realpath(vim.fs.normalize((line:gsub("cd%s*", ""))))
+                    if session_dir == vim.fn.getcwd() then
+                        local session = M.name_to_session(sessions_path, file)
+                        if session then
+                            table.insert(sessions, session)
+                        end
+                    end
+                end
+            end
+        end
+    end
+    return sessions
 end
 
 ---check if an item is in a list
@@ -58,18 +62,18 @@ M.is_in_list = function(value, list)
 	return false
 end
 
----if any of the existing sessions contains the cwd
----then load it on startup directly
+---helper for getting the autoload settings
 ---@param config table
-M.autoload = function(config)
-	local session = M.session_in_cwd(config.sessions.sessions_path)
-	if session ~= nil then
-		vim.cmd.source(config.sessions.sessions_path .. session)
-		vim.g[config.sessions.sessions_variable] = vim.fs.basename(session)
-	end
-	if type(config.post_hook) == "function" then
-		config.post_hook()
-	end
+---@return boolean, boolean
+M.autoload_settings = function(config)
+  local autoload, autoload_prompt = false, false
+  if type(config.autoload) == "boolean" then
+    autoload = config.autoload
+  elseif type(config.autoload) == "table" then
+    autoload = config.autoload.enable
+    autoload_prompt = config.autoload.prompt
+  end
+  return autoload, autoload_prompt
 end
 
 ---check if a session is loaded and save it automatically
@@ -102,6 +106,19 @@ M.autoswitch = function(config)
 	for _, buf in pairs(buf_list) do
 		vim.cmd("bd " .. buf)
 	end
+end
+
+---converts a session name into a session object, containing the name and
+---last modified time.
+---@param sessions_path string
+---@param name string
+---@return table | nil
+M.name_to_session = function(sessions_path, name)
+	local stat = vim.uv.fs_stat(sessions_path .. name)
+	if stat then
+		return { name = name, mtime = stat.mtime }
+	end
+	return nil
 end
 
 return M

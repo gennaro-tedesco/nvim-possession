@@ -5,6 +5,58 @@ local sort = require("nvim-possession.sorting")
 
 local M = {}
 
+---create fzf options based on user config and previewer
+---@param user_config table
+---@return table
+local fzf_opts = function(user_config)
+    local fzf = require("fzf-lua")
+    local opts = {
+        user_config = user_config,
+        prompt = user_config.sessions.sessions_icon .. user_config.sessions.sessions_prompt,
+        cwd_prompt = false,
+        file_icons = false,
+        git_icons = false,
+        cwd_header = false,
+        no_header = true,
+
+        previewer = ui.session_previewer,
+        hls = user_config.fzf_hls,
+        winopts = user_config.fzf_winopts,
+        cwd = user_config.sessions.sessions_path,
+        actions = {
+            ["enter"] = M.load,
+            ["ctrl-x"] = { M.delete_selected, fzf.actions.resume, header = "delete session" },
+            ["ctrl-n"] = { fn = M.new, header = "new session" },
+        },
+    }
+    opts = require("fzf-lua.config").normalize_opts(opts, {})
+    opts = require("fzf-lua.core").set_header(opts, { "actions" })
+    return opts
+end
+
+---lists the sessions outputted by the provided thunk in an fzf picker
+---@param user_config table
+---@param get_sessions function
+local list_sessions = function(user_config, get_sessions)
+    local fzf = require("fzf-lua")
+    local function display(fzf_cb)
+        local sessions = get_sessions()
+        table.sort(sessions, function(a, b)
+            if type(config.sort) == "function" then
+                return config.sort(a, b)
+            else
+                return sort.alpha_sort(a, b)
+            end
+        end)
+        for _, sess in ipairs(sessions) do
+            fzf_cb(sess.name)
+        end
+        fzf_cb()
+    end
+    local opts = fzf_opts(user_config)
+    fzf.fzf_exec(display, opts)
+end
+
 ---expose the following interfaces:
 ---require("nvim-possession").new()
 ---require("nvim-possession").list()
@@ -127,68 +179,51 @@ M.setup = function(user_opts)
 			return
 		end
 
-		local function list_sessions(fzf_cb)
+		local function get_sessions()
 			local sessions = {}
 			for name, type in vim.fs.dir(user_config.sessions.sessions_path) do
 				if type == "file" then
-					local stat = vim.uv.fs_stat(user_config.sessions.sessions_path .. name)
-					if stat then
-						table.insert(sessions, { name = name, mtime = stat.mtime })
+					local session = utils.name_to_session(user_config.sessions.sessions_path, name)
+					if session then
+						table.insert(sessions, session)
 					end
 				end
 			end
-			table.sort(sessions, function(a, b)
-				if type(user_config.sort) == "function" then
-					return user_config.sort(a, b)
-				else
-					return sort.alpha_sort(a, b)
-				end
-			end)
-			for _, sess in ipairs(sessions) do
-				fzf_cb(sess.name)
-			end
-			fzf_cb()
+			return sessions
 		end
-
-		local opts = {
-			user_config = user_config,
-			prompt = user_config.sessions.sessions_icon .. user_config.sessions.sessions_prompt,
-			cwd_prompt = false,
-			file_icons = false,
-			git_icons = false,
-			cwd_header = false,
-			no_header = true,
-
-			previewer = ui.session_previewer,
-			hls = user_config.fzf_hls,
-			winopts = user_config.fzf_winopts,
-			cwd = user_config.sessions.sessions_path,
-			actions = {
-				["enter"] = M.load,
-				["ctrl-x"] = { M.delete_selected, fzf.actions.resume, header = "delete session" },
-				["ctrl-n"] = { fn = M.new, header = "new session" },
-			},
-		}
-		opts = require("fzf-lua.config").normalize_opts(opts, {})
-		opts = require("fzf-lua.core").set_header(opts, { "actions" })
-		fzf.fzf_exec(list_sessions, opts)
+		list_sessions(user_config, get_sessions)
 	end
 
-	if user_config.autoload and vim.fn.argc() == 0 then
-		utils.autoload(user_config)
-	end
+    local autoload, autoload_prompt = utils.autoload_settings(user_config)
+    if autoload then
+        local sessions = utils.sessions_in_cwd(user_config.sessions.sessions_path)
+        local num_sessions = #sessions
+        if num_sessions > 0 then
+            if num_sessions > 1 and autoload_prompt then
+                list_sessions(user_config, function()
+                    return utils.sessions_in_cwd(user_config.sessions.sessions_path)
+                end)
+            else
+                vim.cmd.source(user_config.sessions.sessions_path .. sessions[1].name)
+                vim.g[user_config.sessions.sessions_variable] = vim.fs.basename(sessions[1].name)
+                if type(user_config.post_hook) == "function" then
+                    user_config.post_hook()
+                end
+            end
+        end
+    end
 
-	if user_config.autosave then
-		local autosave_possession = vim.api.nvim_create_augroup("AutosavePossession", {})
-		vim.api.nvim_clear_autocmds({ group = autosave_possession })
-		vim.api.nvim_create_autocmd("VimLeave", {
-			group = autosave_possession,
-			desc = "📌 save session on VimLeave",
-			callback = function()
-				utils.autosave(user_config)
-			end,
-		})
-	end
+    if user_config.autosave then
+        local autosave_possession = vim.api.nvim_create_augroup("AutosavePossession", {})
+        vim.api.nvim_clear_autocmds({ group = autosave_possession })
+        vim.api.nvim_create_autocmd("VimLeave", {
+            group = autosave_possession,
+            desc = "📌 save session on VimLeave",
+            callback = function()
+                utils.autosave(user_config)
+            end,
+        })
+    end
 end
 
 return M
