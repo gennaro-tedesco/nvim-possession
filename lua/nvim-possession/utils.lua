@@ -29,24 +29,24 @@ end
 ---@param sessions_path string
 ---@return table
 M.sessions_in_cwd = function(sessions_path)
-    local session_dir, dir_pat = "", "^cd%s*"
-    local sessions = {}
-    for file, type in vim.fs.dir(sessions_path) do
-        if type == "file" then
-            for line in io.lines(sessions_path .. file) do
-                if string.find(line, dir_pat) then
-                    session_dir = vim.uv.fs_realpath(vim.fs.normalize((line:gsub("cd%s*", ""))))
-                    if session_dir == vim.fn.getcwd() then
-                        local session = M.name_to_session(sessions_path, file)
-                        if session then
-                            table.insert(sessions, session)
-                        end
-                    end
-                end
-            end
-        end
-    end
-    return sessions
+	local session_dir, dir_pat = "", "^cd%s*"
+	local sessions = {}
+	for file, type in vim.fs.dir(sessions_path) do
+		if type == "file" then
+			for line in io.lines(sessions_path .. file) do
+				if string.find(line, dir_pat) then
+					session_dir = vim.uv.fs_realpath(vim.fs.normalize((line:gsub("cd%s*", ""))))
+					if session_dir == vim.fn.getcwd() then
+						local session = M.name_to_session(sessions_path, file)
+						if session then
+							table.insert(sessions, session)
+						end
+					end
+				end
+			end
+		end
+	end
+	return sessions
 end
 
 ---check if an item is in a list
@@ -66,14 +66,14 @@ end
 ---@param config table
 ---@return boolean, boolean
 M.autoload_settings = function(config)
-  local autoload, autoload_prompt = false, false
-  if type(config.autoload) == "boolean" then
-    autoload = config.autoload
-  elseif type(config.autoload) == "table" then
-    autoload = config.autoload.enable
-    autoload_prompt = config.autoload.prompt
-  end
-  return autoload, autoload_prompt
+	local autoload, autoload_prompt = false, false
+	if type(config.autoload) == "boolean" then
+		autoload = config.autoload
+	elseif type(config.autoload) == "table" then
+		autoload = config.autoload.enable
+		autoload_prompt = config.autoload.prompt
+	end
+	return autoload, autoload_prompt
 end
 
 ---check if a session is loaded and save it automatically
