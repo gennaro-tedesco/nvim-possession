@@ -148,6 +148,7 @@ M.setup = function(user_opts)
 		}
 		opts = require("fzf-lua.config").normalize_opts(opts, {})
 		opts = require("fzf-lua.core").set_header(opts, { "actions" })
+
 		---autoload mechanism
 		if cwd then
 			local sessions_in_cwd = utils.list_sessions(user_config, cwd)
@@ -160,11 +161,21 @@ M.setup = function(user_opts)
 					user_config.post_hook()
 				end
 			else
-				fzf.fzf_exec(utils.list_sessions(user_config, cwd), opts)
+				fzf.fzf_exec(function(fzf_cb)
+					for _, sess in ipairs(utils.list_sessions(user_config, cwd)) do
+						fzf_cb(sess)
+					end
+					fzf_cb()
+				end, opts)
 			end
 		---standard list load mechanism
 		else
-			fzf.fzf_exec(utils.list_sessions(user_config), opts)
+			fzf.fzf_exec(function(fzf_cb)
+				for _, sess in ipairs(utils.list_sessions(user_config)) do
+					fzf_cb(sess)
+				end
+				fzf_cb()
+			end, opts)
 		end
 	end
 
