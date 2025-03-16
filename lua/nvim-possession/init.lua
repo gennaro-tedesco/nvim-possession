@@ -14,7 +14,7 @@ local M = {}
 M.setup = function(user_opts)
 	local fzf_ok, fzf = pcall(require, "fzf-lua")
 	if not fzf_ok then
-		print("fzf-lua required as dependency")
+		vim.print("fzf-lua required as dependency")
 		return
 	end
 
@@ -31,7 +31,7 @@ M.setup = function(user_opts)
 	---return if path does not exist
 	M.new = function()
 		if vim.fn.finddir(user_config.sessions.sessions_path) == "" then
-			print("sessions_path does not exist")
+			vim.print("sessions_path does not exist")
 			return
 		end
 
@@ -40,9 +40,9 @@ M.setup = function(user_opts)
 			if next(vim.fs.find(name, { path = user_config.sessions.sessions_path })) == nil then
 				vim.cmd.mksession({ args = { user_config.sessions.sessions_path .. name } })
 				vim.g[user_config.sessions.sessions_variable] = vim.fs.basename(name)
-				print("saved in: " .. user_config.sessions.sessions_path .. name)
+				vim.print("saved in: " .. user_config.sessions.sessions_path .. name)
 			else
-				print("session already exists")
+				vim.print("session already exists")
 			end
 		end
 	end
@@ -58,10 +58,10 @@ M.setup = function(user_opts)
 					user_config.save_hook()
 				end
 				vim.cmd.mksession({ args = { user_config.sessions.sessions_path .. cur_session }, bang = true })
-				print("updated session: " .. cur_session)
+				vim.print("updated session: " .. cur_session)
 			end
 		else
-			print("no session loaded")
+			vim.print("no session loaded")
 		end
 	end
 
@@ -87,7 +87,7 @@ M.setup = function(user_opts)
 		local confirm = vim.fn.confirm("delete session?", "&Yes\n&No", 2)
 		if confirm == 1 then
 			os.remove(session)
-			print("deleted " .. session)
+			vim.print("deleted " .. session)
 			if vim.g[user_config.sessions.sessions_variable] == vim.fs.basename(session) then
 				vim.g[user_config.sessions.sessions_variable] = nil
 			end
@@ -95,7 +95,7 @@ M.setup = function(user_opts)
 	end
 	fzf.config.set_action_helpstr(M.delete_selected, "delete-session")
 
-	--delete current active session
+	---delete current active session
 	M.delete = function()
 		local cur_session = vim.g[user_config.sessions.sessions_variable]
 		if cur_session ~= nil then
@@ -103,27 +103,27 @@ M.setup = function(user_opts)
 			if confirm == 1 then
 				local session_path = user_config.sessions.sessions_path .. cur_session
 				os.remove(session_path)
-				print("deleted " .. session_path)
+				vim.print("deleted " .. session_path)
 				if vim.g[user_config.sessions.sessions_variable] == vim.fs.basename(session_path) then
 					vim.g[user_config.sessions.sessions_variable] = nil
 				end
 			end
 		else
-			print("no active session")
+			vim.print("no active session")
 		end
 	end
 
 	---list all existing sessions and their files
-	---return fzf picker
+	---@param cwd boolean|nil
 	M.list = function(cwd)
 		local iter = vim.uv.fs_scandir(user_config.sessions.sessions_path)
 		if iter == nil then
-			print("session folder " .. user_config.sessions.sessions_path .. " does not exist")
+			vim.print("session folder " .. user_config.sessions.sessions_path .. " does not exist")
 			return
 		end
 		local next_dir = vim.uv.fs_scandir_next(iter)
 		if next_dir == nil then
-			print("no saved sessions")
+			vim.print("no saved sessions")
 			return
 		end
 
@@ -152,9 +152,7 @@ M.setup = function(user_opts)
 		if cwd then
 			local sessions_in_cwd = utils.list_sessions(user_config, cwd)
 			if next(sessions_in_cwd) == nil then
-				vim.print("we are here")
-				vim.print("no session to autoload: select from list instead")
-				fzf.fzf_exec(utils.list_sessions(user_config), opts)
+				vim.print("no session to autoload")
 			elseif #sessions_in_cwd == 1 then
 				vim.cmd.source(user_config.sessions.sessions_path .. sessions_in_cwd[1])
 				vim.g[user_config.sessions.sessions_variable] = vim.fs.basename(sessions_in_cwd[1])
