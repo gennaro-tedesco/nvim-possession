@@ -12,9 +12,10 @@ local M = {}
 ---require("nvim-possession").status()
 ---@param user_opts table
 M.setup = function(user_opts)
+	local notification_title = "📌 nvim-possession"
 	local fzf_ok, fzf = pcall(require, "fzf-lua")
 	if not fzf_ok then
-		vim.print("fzf-lua required as dependency")
+		vim.notify("fzf-lua required as dependency", vim.log.levels.WARN, { title = notification_title })
 		return
 	end
 
@@ -31,7 +32,7 @@ M.setup = function(user_opts)
 	---return if path does not exist
 	M.new = function()
 		if vim.fn.finddir(user_config.sessions.sessions_path) == "" then
-			vim.print("sessions_path does not exist")
+			vim.notify("sessions_path does not exist", vim.log.levels.WARN, { title = notification_title })
 			return
 		end
 
@@ -40,9 +41,13 @@ M.setup = function(user_opts)
 			if next(vim.fs.find(name, { path = user_config.sessions.sessions_path })) == nil then
 				vim.cmd.mksession({ args = { user_config.sessions.sessions_path .. name } })
 				vim.g[user_config.sessions.sessions_variable] = vim.fs.basename(name)
-				vim.print("saved in: " .. user_config.sessions.sessions_path .. name)
+				vim.notify(
+					"saved in: " .. user_config.sessions.sessions_path .. name,
+					vim.log.levels.INFO,
+					{ title = notification_title }
+				)
 			else
-				vim.print("session already exists")
+				vim.notify("session already exists", vim.log.levels.INFO, { title = notification_title })
 			end
 		end
 	end
@@ -58,10 +63,10 @@ M.setup = function(user_opts)
 					user_config.save_hook()
 				end
 				vim.cmd.mksession({ args = { user_config.sessions.sessions_path .. cur_session }, bang = true })
-				vim.print("updated session: " .. cur_session)
+				vim.notify("updated session: " .. cur_session, vim.log.levels.INFO, { title = notification_title })
 			end
 		else
-			vim.print("no session loaded")
+			vim.notify("no session loaded", vim.log.levels.INFO, { title = notification_title })
 		end
 	end
 
@@ -87,7 +92,7 @@ M.setup = function(user_opts)
 		local confirm = vim.fn.confirm("delete session?", "&Yes\n&No", 2)
 		if confirm == 1 then
 			os.remove(session)
-			vim.print("deleted " .. session)
+			vim.notify("deleted " .. session, vim.log.levels.INFO, { title = notification_title })
 			if vim.g[user_config.sessions.sessions_variable] == vim.fs.basename(session) then
 				vim.g[user_config.sessions.sessions_variable] = nil
 			end
@@ -103,13 +108,13 @@ M.setup = function(user_opts)
 			if confirm == 1 then
 				local session_path = user_config.sessions.sessions_path .. cur_session
 				os.remove(session_path)
-				vim.print("deleted " .. session_path)
+				vim.notify("deleted " .. session_path, vim.log.levels.INFO, { title = notification_title })
 				if vim.g[user_config.sessions.sessions_variable] == vim.fs.basename(session_path) then
 					vim.g[user_config.sessions.sessions_variable] = nil
 				end
 			end
 		else
-			vim.print("no active session")
+			vim.notify("no active session", vim.log.levels.WARN, { title = notification_title })
 		end
 	end
 
@@ -118,12 +123,16 @@ M.setup = function(user_opts)
 	M.list = function(cwd)
 		local iter = vim.uv.fs_scandir(user_config.sessions.sessions_path)
 		if iter == nil then
-			vim.print("session folder " .. user_config.sessions.sessions_path .. " does not exist")
+			vim.notify(
+				"session folder " .. user_config.sessions.sessions_path .. " does not exist",
+				vim.log.levels.WARN,
+				{ title = notification_title }
+			)
 			return
 		end
 		local next_dir = vim.uv.fs_scandir_next(iter)
 		if next_dir == nil then
-			vim.print("no saved sessions")
+			vim.notify("no saved sessions", vim.log.levels.WARN, { title = notification_title })
 			return
 		end
 
@@ -153,7 +162,7 @@ M.setup = function(user_opts)
 		if cwd then
 			local sessions_in_cwd = utils.list_sessions(user_config, cwd)
 			if next(sessions_in_cwd) == nil then
-				vim.print("no session to autoload")
+				vim.notify("no session to autoload", vim.log.levels.WARN, { title = notification_title })
 			elseif #sessions_in_cwd == 1 then
 				vim.cmd.source(user_config.sessions.sessions_path .. sessions_in_cwd[1])
 				vim.g[user_config.sessions.sessions_variable] = vim.fs.basename(sessions_in_cwd[1])

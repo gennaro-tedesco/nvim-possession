@@ -83,7 +83,7 @@ require("nvim-possession").setup({
                     -- useful to restore file trees, file managers or terminals
                     -- function()
                     --     require('FTerm').open()
-                    --     require('nvim-tree').toggle(false, true)
+                    --     require("nvim-tree.api").tree.toggle()
                     -- end
 
     ---@type possession.Hls
@@ -117,7 +117,7 @@ require("nvim-possession").setup({
 })
 ```
 
-This autoloads sessions when starting neovim without file arguments (i. e. `$ nvim `) and in case such sessions explicitly contain a reference to the current working directory (you must have `vim.go.ssop+=curdir`); this is by design as this plugin intends to be as less invasive as possible.
+This autoloads sessions when starting neovim without file arguments (i. e. `$ nvim `) and in case such sessions explicitly contain a reference to the current working directory (you must have `vim.go.ssop+=curdir`); this is by design as this plugin intends to be as less invasive as possible. If more then one sessions for the current working directory exist, the user is prompted to choose which one to load.
 
 Sessions are automatically saved before quitting, should buffers be added or removed to them. This defaults to `true` (as it is generally expected behaviour), if you want to opt-out specify
 
