@@ -115,39 +115,16 @@ M.setup = function(user_opts)
 
 	---list all existing sessions and their files
 	---return fzf picker
-	M.list = function()
+	M.list = function(cwd)
 		local iter = vim.uv.fs_scandir(user_config.sessions.sessions_path)
 		if iter == nil then
 			print("session folder " .. user_config.sessions.sessions_path .. " does not exist")
 			return
 		end
-		local next = vim.uv.fs_scandir_next(iter)
-		if next == nil then
+		local next_dir = vim.uv.fs_scandir_next(iter)
+		if next_dir == nil then
 			print("no saved sessions")
 			return
-		end
-
-		local function list_sessions(fzf_cb)
-			local sessions = {}
-			for name, type in vim.fs.dir(user_config.sessions.sessions_path) do
-				if type == "file" then
-					local stat = vim.uv.fs_stat(user_config.sessions.sessions_path .. name)
-					if stat then
-						table.insert(sessions, { name = name, mtime = stat.mtime })
-					end
-				end
-			end
-			table.sort(sessions, function(a, b)
-				if type(user_config.sort) == "function" then
-					return user_config.sort(a, b)
-				else
-					return sort.alpha_sort(a, b)
-				end
-			end)
-			for _, sess in ipairs(sessions) do
-				fzf_cb(sess.name)
-			end
-			fzf_cb()
 		end
 
 		local opts = {
@@ -171,11 +148,30 @@ M.setup = function(user_opts)
 		}
 		opts = require("fzf-lua.config").normalize_opts(opts, {})
 		opts = require("fzf-lua.core").set_header(opts, { "actions" })
-		fzf.fzf_exec(list_sessions, opts)
+		---autoload mechanism
+		if cwd then
+			local sessions_in_cwd = utils.list_sessions(user_config, cwd)
+			if next(sessions_in_cwd) == nil then
+				vim.print("we are here")
+				vim.print("no session to autoload: select from list instead")
+				fzf.fzf_exec(utils.list_sessions(user_config), opts)
+			elseif #sessions_in_cwd == 1 then
+				vim.cmd.source(user_config.sessions.sessions_path .. sessions_in_cwd[1])
+				vim.g[user_config.sessions.sessions_variable] = vim.fs.basename(sessions_in_cwd[1])
+				if type(user_config.post_hook) == "function" then
+					user_config.post_hook()
+				end
+			else
+				fzf.fzf_exec(utils.list_sessions(user_config, cwd), opts)
+			end
+		---standard list load mechanism
+		else
+			fzf.fzf_exec(utils.list_sessions(user_config), opts)
+		end
 	end
 
 	if user_config.autoload and vim.fn.argc() == 0 then
-		utils.autoload(user_config)
+		M.list(true)
 	end
 
 	if user_config.autosave then

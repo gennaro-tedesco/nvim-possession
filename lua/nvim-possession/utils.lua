@@ -1,4 +1,38 @@
+local sort = require("nvim-possession.sorting")
 local M = {}
+
+---return the list of available sessions
+---@param user_config table
+---@return table
+M.list_sessions = function(user_config, cwd)
+	local sessions = {}
+	for name, type in vim.fs.dir(user_config.sessions.sessions_path) do
+		if type == "file" then
+			local stat = vim.uv.fs_stat(user_config.sessions.sessions_path .. name)
+			if stat then
+				table.insert(sessions, { name = name, mtime = stat.mtime })
+			end
+		end
+	end
+	table.sort(sessions, function(a, b)
+		if type(user_config.sort) == "function" then
+			return user_config.sort(a, b)
+		else
+			return sort.alpha_sort(a, b)
+		end
+	end)
+	local session_names = {}
+	for _, sess in ipairs(sessions) do
+		if cwd then
+			if M.is_in_cwd(sess.name, user_config) then
+				table.insert(session_names, sess.name)
+			end
+		else
+			table.insert(session_names, sess.name)
+		end
+	end
+	return session_names
+end
 
 ---return the list of files in the session
 ---@param file string
@@ -25,24 +59,25 @@ M.session_files = function(file)
 	return buffers
 end
 
----return the first session whose dir corresponds to cwd
----@param sessions_path string
----@return string|nil
-M.session_in_cwd = function(sessions_path)
+---checks whether a session is contained in the cwd
+---@param session string
+---@param user_config table
+---@return boolean
+M.is_in_cwd = function(session, user_config)
 	local session_dir, dir_pat = "", "^cd%s*"
-	for file, type in vim.fs.dir(sessions_path) do
-		if type == "file" then
-			for line in io.lines(sessions_path .. file) do
+	for file, type in vim.fs.dir(user_config.sessions.sessions_path) do
+		if type == "file" and file == session then
+			for line in io.lines(user_config.sessions.sessions_path .. file) do
 				if string.find(line, dir_pat) then
 					session_dir = vim.uv.fs_realpath(vim.fs.normalize((line:gsub("cd%s*", ""))))
 					if session_dir == vim.fn.getcwd() then
-						return file
+						return true
 					end
 				end
 			end
 		end
 	end
-	return nil
+	return false
 end
 
 ---check if an item is in a list
@@ -56,20 +91,6 @@ M.is_in_list = function(value, list)
 		end
 	end
 	return false
-end
-
----if any of the existing sessions contains the cwd
----then load it on startup directly
----@param config table
-M.autoload = function(config)
-	local session = M.session_in_cwd(config.sessions.sessions_path)
-	if session ~= nil then
-		vim.cmd.source(config.sessions.sessions_path .. session)
-		vim.g[config.sessions.sessions_variable] = vim.fs.basename(session)
-	end
-	if type(config.post_hook) == "function" then
-		config.post_hook()
-	end
 end
 
 ---check if a session is loaded and save it automatically
