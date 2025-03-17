@@ -117,7 +117,15 @@ require("nvim-possession").setup({
 })
 ```
 
-This autoloads sessions when starting neovim without file arguments (i. e. `$ nvim `) and in case such sessions explicitly contain a reference to the current working directory (you must have `vim.go.ssop+=curdir`); this is by design as this plugin intends to be as less invasive as possible. If more then one sessions for the current working directory exist, the user is prompted to choose which one to load.
+This autoloads sessions when starting neovim without file arguments (i. e. `$ nvim `) and in case such sessions explicitly contain a reference to the current working directory (you must have `vim.go.ssop+=curdir`). If more than one session in the current working directory exists, you can either specify
+
+```lua
+require("nvim-possession").setup({
+    autoprompt = true -- default false
+})
+```
+
+to be presented with a fuzzy prompt or default automatically to load the topmost sorted session (see `sort = require("nvim-possession.sorting")` in [Usage](#-usage-and-advanced-configuration)).
 
 Sessions are automatically saved before quitting, should buffers be added or removed to them. This defaults to `true` (as it is generally expected behaviour), if you want to opt-out specify
 

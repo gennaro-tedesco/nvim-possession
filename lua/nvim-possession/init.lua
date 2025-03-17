@@ -163,29 +163,23 @@ M.setup = function(user_opts)
 			local sessions_in_cwd = utils.list_sessions(user_config, cwd)
 			if next(sessions_in_cwd) == nil then
 				vim.notify("no session to autoload", vim.log.levels.WARN, { title = notification_title })
-			elseif #sessions_in_cwd == 1 then
+				return nil
+			elseif #sessions_in_cwd == 1 or user_config.autoprompt then
 				vim.cmd.source(user_config.sessions.sessions_path .. sessions_in_cwd[1])
 				vim.g[user_config.sessions.sessions_variable] = vim.fs.basename(sessions_in_cwd[1])
 				if type(user_config.post_hook) == "function" then
 					user_config.post_hook()
 				end
-			else
-				fzf.fzf_exec(function(fzf_cb)
-					for _, sess in ipairs(utils.list_sessions(user_config, cwd)) do
-						fzf_cb(sess)
-					end
-					fzf_cb()
-				end, opts)
+				return nil
 			end
-		---standard list load mechanism
-		else
-			fzf.fzf_exec(function(fzf_cb)
-				for _, sess in ipairs(utils.list_sessions(user_config)) do
-					fzf_cb(sess)
-				end
-				fzf_cb()
-			end, opts)
 		end
+		---standard list load mechanism
+		fzf.fzf_exec(function(fzf_cb)
+			for _, sess in ipairs(utils.list_sessions(user_config, cwd)) do
+				fzf_cb(sess)
+			end
+			fzf_cb()
+		end, opts)
 	end
 
 	if user_config.autoload and vim.fn.argc() == 0 then
