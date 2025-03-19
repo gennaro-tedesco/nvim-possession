@@ -193,7 +193,7 @@ After loading a session you may want to specify additional actions to run that m
 require("nvim-possession").setup({
     post_hook = function()
         require("FTerm").open()
-        require('nvim-tree').toggle(false, true)
+        require("nvim-tree.api").tree.toggle()
         vim.lsp.buf.format()
     end
 })
