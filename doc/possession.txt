@@ -1,4 +1,4 @@
-*possession.txt*         For Neovim >= 0.8.0        Last change: 2025 March 17
+*possession.txt*         For Neovim >= 0.8.0        Last change: 2025 March 19
 
 ==============================================================================
 Table of Contents                               *possession-table-of-contents*
@@ -249,7 +249,7 @@ finders or set specific options. To do so you can use
     require("nvim-possession").setup({
         post_hook = function()
             require("FTerm").open()
-            require('nvim-tree').toggle(false, true)
+            require("nvim-tree.api").tree.toggle()
             vim.lsp.buf.format()
         end
     })
