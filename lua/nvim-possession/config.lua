@@ -9,7 +9,11 @@ M.sessions = {
 	sessions_prompt = "sessions:",
 }
 
+---@type boolean
 M.autoload = false
+---@type boolean
+M.autoprompt = false
+---@type boolean
 M.autosave = true
 M.autoswitch = {
 	enable = false,
