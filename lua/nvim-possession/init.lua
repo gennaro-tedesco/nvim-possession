@@ -162,7 +162,6 @@ M.setup = function(user_opts)
 		if cwd then
 			local sessions_in_cwd = utils.list_sessions(user_config, cwd)
 			if next(sessions_in_cwd) == nil then
-				vim.notify("no session to autoload", vim.log.levels.WARN, { title = notification_title })
 				return nil
 			elseif #sessions_in_cwd == 1 or not user_config.autoprompt then
 				vim.schedule(function()
