@@ -165,11 +165,13 @@ M.setup = function(user_opts)
 				vim.notify("no session to autoload", vim.log.levels.WARN, { title = notification_title })
 				return nil
 			elseif #sessions_in_cwd == 1 or not user_config.autoprompt then
-				vim.cmd.source(user_config.sessions.sessions_path .. sessions_in_cwd[1])
-				vim.g[user_config.sessions.sessions_variable] = vim.fs.basename(sessions_in_cwd[1])
-				if type(user_config.post_hook) == "function" then
-					user_config.post_hook()
-				end
+				vim.schedule(function()
+					vim.cmd.source(user_config.sessions.sessions_path .. sessions_in_cwd[1])
+					vim.g[user_config.sessions.sessions_variable] = vim.fs.basename(sessions_in_cwd[1])
+					if type(user_config.post_hook) == "function" then
+						user_config.post_hook()
+					end
+				end)
 				return nil
 			end
 		end
