@@ -1,7 +1,6 @@
 local config = require("nvim-possession.config")
 local ui = require("nvim-possession.ui")
 local utils = require("nvim-possession.utils")
-local sort = require("nvim-possession.sorting")
 
 local M = {}
 
@@ -12,14 +11,14 @@ local M = {}
 ---require("nvim-possession").status()
 ---@param user_opts table
 M.setup = function(user_opts)
-	local notification_title = "📌 nvim-possession"
+	local user_config = vim.tbl_deep_extend("force", config, user_opts or {})
+
+	local notification_title = user_config.sessions.sessions_icon .. " nvim-possession"
 	local fzf_ok, fzf = pcall(require, "fzf-lua")
 	if not fzf_ok then
 		vim.notify("fzf-lua required as dependency", vim.log.levels.WARN, { title = notification_title })
 		return
 	end
-
-	local user_config = vim.tbl_deep_extend("force", config, user_opts or {})
 
 	---get global variable with session name: useful for statusbar components
 	---@return string|nil
