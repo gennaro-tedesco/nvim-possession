@@ -111,9 +111,14 @@ end
 ---2) save and close all modifiable buffers
 ---@param config table
 M.autoswitch = function(config)
-	vim.cmd.write()
+    -- only call :write if the current buffer has a name
+    local cur_buf_name = vim.api.nvim_buf_get_name(0)
+    if cur_buf_name ~= "" then
+        vim.cmd.write()
+    end
 	M.autosave(config)
-	vim.cmd.bufdo("e")
+    -- only reload (“:edit”) buffers that have a name, and do it silently
+    vim.cmd([[silent! bufdo if expand('%') !=# '' | edit | endif]])
 	local buf_list = vim.tbl_filter(function(buf)
 		return vim.api.nvim_buf_is_valid(buf)
 			and vim.api.nvim_buf_get_option(buf, "buflisted")
