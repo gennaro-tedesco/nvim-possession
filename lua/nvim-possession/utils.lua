@@ -111,9 +111,11 @@ end
 ---2) save and close all modifiable buffers
 ---@param config table
 M.autoswitch = function(config)
-	vim.cmd.write()
+    if vim.api.nvim_buf_get_name(0) ~= "" then
+        vim.cmd.write()
+    end
 	M.autosave(config)
-	vim.cmd.bufdo("e")
+    vim.cmd([[silent! bufdo if expand('%') !=# '' | edit | endif]])
 	local buf_list = vim.tbl_filter(function(buf)
 		return vim.api.nvim_buf_is_valid(buf)
 			and vim.api.nvim_buf_get_option(buf, "buflisted")
