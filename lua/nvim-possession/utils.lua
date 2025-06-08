@@ -118,9 +118,9 @@ M.autoswitch = function(config)
     vim.cmd([[silent! bufdo if expand('%') !=# '' | edit | endif]])
 	local buf_list = vim.tbl_filter(function(buf)
 		return vim.api.nvim_buf_is_valid(buf)
-			and vim.api.nvim_buf_get_option(buf, "buflisted")
-			and vim.api.nvim_buf_get_option(buf, "modifiable")
-			and not M.is_in_list(vim.api.nvim_buf_get_option(buf, "filetype"), config.autoswitch.exclude_ft)
+			and vim.bo[buf].buflisted
+			and vim.bo[buf].modifiable
+			and not M.is_in_list(vim.bo[buf].filetype, config.autoswitch.exclude_ft)
 	end, vim.api.nvim_list_bufs())
 	for _, buf in pairs(buf_list) do
 		vim.cmd("bd " .. buf)
