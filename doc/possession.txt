@@ -1,4 +1,4 @@
-*possession.txt*         For Neovim >= 0.8.0         Last change: 2025 June 08
+*possession.txt*       For Neovim >= 0.8.0      Last change: 2025 September 03
 
 ==============================================================================
 Table of Contents                               *possession-table-of-contents*
@@ -58,10 +58,9 @@ Exposed interfaces
   -------------------------------------------------------------------------------------
   function              description                       interaction
   --------------------- --------------------------------- -----------------------------
-  possession.list()     list all the existing sessions    <CR> load selected session
-                        with fzf-lua; preview shows files <Ctrl-x> delete selected session
-                        in session                        <Ctrl-r> rename selected session
-							  
+  possession.list()     list all the existing sessions    <CR> load selected
+                        with fzf-lua; preview shows files session<Ctrl-x> delete
+                        in session                        selection session
 
   possession.new()      prompt for name to create new     session folder must alredy
                         session                           exist, return a message error
