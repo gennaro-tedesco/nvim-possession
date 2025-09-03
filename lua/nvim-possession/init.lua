@@ -173,7 +173,7 @@ M.setup = function(user_opts)
 				["enter"] = M.load,
 				["ctrl-x"] = { M.delete_selected, fzf.actions.resume, header = "delete session" },
 				["ctrl-r"] = { M.rename_selected, fzf.actions.resume, header = "rename session" },
-				-- ["ctrl-n"] = { fn = M.new, header = "new session" },
+				["ctrl-n"] = { fn = M.new, header = "new session" },
 			},
 		}
 		opts = require("fzf-lua.config").normalize_opts(opts, {})
