@@ -120,21 +120,25 @@ M.setup = function(user_opts)
 	---rename selected session
 	---@param selected string
 	M.rename_selected = function(selected)
-        local session_path = user_config.sessions.sessions_path
-        local old_name = selected[1]
-        local old_file_path = session_path .. old_name
+		local session_path = user_config.sessions.sessions_path
+		local old_name = selected[1]
+		local old_file_path = session_path .. old_name
 
-        local new_name = vim.fn.input("Enter new name for the session: ", old_name)
-        
-        if new_name and new_name ~= "" then
-            local new_file_path = session_path .. new_name
+		local new_name = vim.fn.input("Enter new name for the session: ", old_name)
 
-            os.rename(old_file_path, new_file_path)
-            
-            vim.notify("Session renamed from " .. old_name .. " to " .. new_name, vim.log.levels.INFO, { title = notification_title })
-        else
-            vim.notify( "New name cannot be empty", vim.log.levels.WARN, { title = notification_title })
-        end
+		if new_name and new_name ~= "" then
+			local new_file_path = session_path .. new_name
+
+			os.rename(old_file_path, new_file_path)
+
+			vim.notify(
+				"Session renamed from " .. old_name .. " to " .. new_name,
+				vim.log.levels.INFO,
+				{ title = notification_title }
+			)
+		else
+			vim.notify("New name cannot be empty", vim.log.levels.WARN, { title = notification_title })
+		end
 	end
 	fzf.config.set_action_helpstr(M.rename_selected, "rename-session")
 
