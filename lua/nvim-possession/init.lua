@@ -123,14 +123,11 @@ M.setup = function(user_opts)
 		local session_path = user_config.sessions.sessions_path
 		local old_name = selected[1]
 		local old_file_path = session_path .. old_name
-
 		local new_name = vim.fn.input("Enter new name for the session: ", old_name)
 
 		if new_name and new_name ~= "" then
 			local new_file_path = session_path .. new_name
-
 			os.rename(old_file_path, new_file_path)
-
 			vim.notify(
 				"Session renamed from " .. old_name .. " to " .. new_name,
 				vim.log.levels.INFO,
@@ -175,13 +172,25 @@ M.setup = function(user_opts)
 			cwd = user_config.sessions.sessions_path,
 			actions = {
 				["enter"] = M.load,
-				["ctrl-x"] = { M.delete_selected, fzf.actions.resume, header = "delete session" },
-				["ctrl-r"] = { M.rename_selected, fzf.actions.resume, header = "rename session" },
+				["ctrl-x"] = {
+					fn = function(selected)
+						M.delete_selected(selected)
+						M.list()
+					end,
+					header = "delete session",
+				},
+				["ctrl-r"] = {
+					fn = function(selected)
+						M.rename_selected(selected)
+						M.list()
+					end,
+					header = "rename session",
+				},
 				["ctrl-n"] = { fn = M.new, header = "new session" },
 			},
 		}
 		opts = require("fzf-lua.config").normalize_opts(opts, {})
-		opts = require("fzf-lua.core").set_header(opts, { "actions" })
+		opts = require("fzf-lua.core").set_header(opts)
 
 		---autoload mechanism
 		if cwd then
