@@ -47,12 +47,12 @@ Install `nvim-possession` with your favourite plugin manager (`fzf-lua` is requi
 
 Exposed interfaces
 
-| function            | description                                                                 | interaction                                                         |
+| function | description | interaction |
 | :------------------ | :-------------------------------------------------------------------------- | :------------------------------------------------------------------ |
-| possession.list()   | list all the existing sessions with fzf-lua; preview shows files in session | `<CR>` load selected session<br>`<Ctrl-x>` delete selection session |
-| possession.new()    | prompt for name to create new session                                       | session folder must alredy exist, return a message error otherwise  |
-| possession.update() | update current session (if new buffers are open)                            | do nothing if no session is loaded                                  |
-| possession.delete() | delete current session (without prompt)                                     | do nothing if no session is loaded                                  |
+| possession.list() | list all the existing sessions with fzf-lua; preview shows files in session | `<CR>` load selected session<br>`<Ctrl-x>` delete selection session<br>`<Ctrl-r>` rename selected session<br>`<Ctrl-n>` create new session |
+| possession.new() | prompt for name to create new session | session folder must alredy exist, return a message error otherwise |
+| possession.update() | update current session (if new buffers are open) | do nothing if no session is loaded |
+| possession.delete() | delete current session (without prompt) | do nothing if no session is loaded |
 
 ## 🛠 Usage and advanced configuration
 
@@ -100,6 +100,12 @@ require("nvim-possession").setup({
         preview = {
             vertical = "right:30%"
         }
+    }
+    ---@type possession.Mapopts
+    mappings = { -- configure action keymaps on possession.list() picker
+        action_delete = "ctrl-x",
+        action_rename = "ctrl-r",
+        action_new = "ctrl-n",
     }
     sort = require("nvim-possession.sorting").alpha_sort -- callback, sorting function to list sessions
                                                          -- require("nvim-possession.sorting").time_sort

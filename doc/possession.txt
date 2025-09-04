@@ -1,4 +1,4 @@
-*possession.txt*       For Neovim >= 0.8.0      Last change: 2025 September 03
+*possession.txt*       For Neovim >= 0.8.0      Last change: 2025 September 04
 
 ==============================================================================
 Table of Contents                               *possession-table-of-contents*
@@ -60,7 +60,10 @@ Exposed interfaces
   --------------------- --------------------------------- -----------------------------
   possession.list()     list all the existing sessions    <CR> load selected
                         with fzf-lua; preview shows files session<Ctrl-x> delete
-                        in session                        selection session
+                        in session                        selection session<Ctrl-r>
+                                                          rename selected
+                                                          session<Ctrl-n> create new
+                                                          session
 
   possession.new()      prompt for name to create new     session folder must alredy
                         session                           exist, return a message error
@@ -129,6 +132,12 @@ however if you really want to do so:
             preview = {
                 vertical = "right:30%"
             }
+        }
+        ---@type possession.Mapopts
+        mappings = { -- configure action keymaps on possession.list() picker
+            action_delete = "ctrl-x",
+            action_rename = "ctrl-r",
+            action_new = "ctrl-n",
         }
         sort = require("nvim-possession.sorting").alpha_sort -- callback, sorting function to list sessions
                                                              -- require("nvim-possession.sorting").time_sort
