@@ -54,6 +54,16 @@ M.fzf_winopts = {
 	},
 }
 
+---@class possession.Mapopts
+---@field delete? string
+---@field rename? string
+---@field new? string
+M.mappings = {
+	delete = "ctrl-x",
+	rename = "ctrl-r",
+	new = "ctrl-n",
+}
+
 ---@type function
 M.sort = sort.alpha_sort
 

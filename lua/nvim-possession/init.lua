@@ -172,21 +172,21 @@ M.setup = function(user_opts)
 			cwd = user_config.sessions.sessions_path,
 			actions = {
 				["enter"] = M.load,
-				["ctrl-x"] = {
+				[user_config.mappings.delete] = {
 					fn = function(selected)
 						M.delete_selected(selected)
 						M.list()
 					end,
 					header = "delete session",
 				},
-				["ctrl-r"] = {
+				[user_config.mappings.rename] = {
 					fn = function(selected)
 						M.rename_selected(selected)
 						M.list()
 					end,
 					header = "rename session",
 				},
-				["ctrl-n"] = { fn = M.new, header = "new session" },
+				[user_config.mappings.new] = { fn = M.new, header = "new session" },
 			},
 		}
 		opts = require("fzf-lua.config").normalize_opts(opts, {})
