@@ -103,9 +103,9 @@ require("nvim-possession").setup({
     }
     ---@type possession.Mapopts
     mappings = { -- configure action keymaps on possession.list() picker
-        delete = "ctrl-x",
-        rename = "ctrl-r",
-        new = "ctrl-n",
+        action_delete = "ctrl-x",
+        action_rename = "ctrl-r",
+        action_new = "ctrl-n",
     }
     sort = require("nvim-possession.sorting").alpha_sort -- callback, sorting function to list sessions
                                                          -- require("nvim-possession.sorting").time_sort
