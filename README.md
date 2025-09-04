@@ -101,7 +101,8 @@ require("nvim-possession").setup({
             vertical = "right:30%"
         }
     }
-    mappings = {
+    ---@type possession.Mapopts
+    mappings = { -- configure action keymaps on possession.list() picker
         delete = "ctrl-x",
         rename = "ctrl-r",
         new = "ctrl-n",

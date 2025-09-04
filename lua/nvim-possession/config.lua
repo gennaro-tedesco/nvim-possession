@@ -59,9 +59,9 @@ M.fzf_winopts = {
 ---@field rename? string
 ---@field new? string
 M.mappings = {
-	delete = "ctrl-x",
-	rename = "ctrl-r",
-	new = "ctrl-n",
+	action_delete = "ctrl-x",
+	action_rename = "ctrl-r",
+	action_new = "ctrl-n",
 }
 
 ---@type function
