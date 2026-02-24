@@ -69,8 +69,8 @@ M.is_in_cwd = function(session, user_config)
 		if type == "file" and file == session then
 			for line in io.lines(user_config.sessions.sessions_path .. file) do
 				if string.find(line, dir_pat) then
-					session_dir = vim.uv.fs_realpath(vim.fs.normalize((line:gsub("cd%s*", ""))))
-					if session_dir == vim.fn.getcwd() then
+					session_dir = vim.fs.normalize(vim.uv.fs_realpath(vim.fs.normalize((line:gsub("cd%s*", "")))))
+					if session_dir == vim.fs.normalize(vim.fn.getcwd()) then
 						return true
 					end
 				end
